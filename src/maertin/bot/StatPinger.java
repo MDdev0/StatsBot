@@ -1,12 +1,9 @@
 package maertin.bot;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 import javax.security.auth.login.LoginException;
 
@@ -34,9 +31,11 @@ public class StatPinger {
 	@SuppressWarnings("unused")
 	private static AlertManager alerts;
 	
-	public static void main(String[] args) throws LoginException, IOException {
+	public static void main(String[] args) throws LoginException, IOException, InterruptedException {
 		jda = JDABuilder.createLight(TOKEN).build();
-		jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.listening("for errors and loading saved sources!"));
+		jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.listening("error logs and loading saved sources!"));
+		
+		jda.awaitReady();
 		
 		loadAll();
 		
@@ -48,7 +47,6 @@ public class StatPinger {
 	/*
 	 * TODO: Command to remove a source from your server
 	 * TODO: Make the data collection from Mixerno a little more efficient
-	 * FIXME: Save information between restarts
 	 * FIXME: ADD A CLEAN SHUTDOWN FOR GOD'S SAKE!
 	 */
 	
@@ -64,13 +62,10 @@ public class StatPinger {
 		if (saves != null) {
 			for (File save : saves) {
 				try {
-					FileInputStream loadFile = new FileInputStream(save);
-					ObjectInputStream loadObj = new ObjectInputStream(loadFile);
-					StatSource loadedSource = (StatSource) loadObj.readObject();
-					sources.add(loadedSource);
-					loadFile.close();
-					loadObj.close();
-				} catch (IOException | ClassNotFoundException e) {
+					StatSource source = new StatSource();
+					source.deserialize(save);
+					sources.add(source);
+				} catch (IOException | NoSuchElementException e) {
 					System.out.println("Unable to load source:");
 					System.out.println(save.getAbsolutePath());
 					e.printStackTrace();
@@ -87,14 +82,10 @@ public class StatPinger {
 	public static void saveAll() {
 		for (StatSource source : sources) {
 			try {
-				FileOutputStream saveFile = new FileOutputStream( "saves/" + (
-								source.getType() == 0 ? "YTSub" : "UNKNOWN" // source.getType() == 0 ? "YTSub" : source.getType() == 1 ? "ETC" : "ETC"
-							) + "_" + source.getID() + ".ser", false);
-				
-				ObjectOutputStream saveObj = new ObjectOutputStream(saveFile);
-				saveObj.writeObject(source);
-				saveObj.close();
-				saveFile.close();
+				File saveFile = new File( "saves/" + (
+								source.getType() == StatSource.YOUTUBE_SUBSCRIBER ? "YTSub" : "UNKNOWN" // source.getType() == 0 ? "YTSub" : source.getType() == 1 ? "ETC" : "ETC"
+							) + "_" + source.getID() + ".dat");
+				source.serialize(saveFile);
 			} catch (IOException e) {
 				System.out.println("Unable to save source:");
 				System.out.println(source.getID() + " of type " + source.getType());

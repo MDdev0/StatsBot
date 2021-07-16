@@ -1,10 +1,11 @@
 package maertin.bot;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import net.dv8tion.jda.api.entities.Guild;
 
@@ -12,15 +13,11 @@ import net.dv8tion.jda.api.entities.Guild;
  * @author maertin
  * Container for one statistic source's info <b>and</b> the Guilds listening to it.
  */
-public class StatSource extends ArrayList<Guild> implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5270083730453085977L;
+@SuppressWarnings("serial")
+public class StatSource extends ArrayList<Guild> {
 
 	// These are all the supported sources. 
-	public static final int YOUTUBE_SUBSCRIBER = 0;
+	public static final int YOUTUBE_SUBSCRIBER = 1;
 	
 	// Instance Variables
 	private String sourceID;
@@ -34,10 +31,11 @@ public class StatSource extends ArrayList<Guild> implements Serializable {
 	 * @param type - The type of source this represents. 
 	 */
 	public StatSource(String id, int type) {
-		super();
 		sourceID = id;
 		sourceType = type;
 	}
+	
+	public StatSource() {}
 	
 	/**
 	 * @return The source's ID as a String.
@@ -96,7 +94,7 @@ public class StatSource extends ArrayList<Guild> implements Serializable {
 	}
 	
 	@Override
-	//SCUFFED
+	//SCUFFED EQUALS METHOD
 	/**
 	 * Yes, I know this is probably a scuffed way of doing things.
 	 * I do it so I can use ArrayList.contains on the main list.
@@ -105,27 +103,53 @@ public class StatSource extends ArrayList<Guild> implements Serializable {
 		return equalsIgnoreGuilds(o);
 	}
 	
-	// SERIALIZATION STUFF
+	/*
+	 * SCUFFED SERIALIZATION STUFF
+	 * All of this code is probably TERRIBLE, but I have
+	 * no clue how to do serialization properly in this scenario.
+	 * Too bad, I guess.
+	 */
 	
-	private void readObject(ObjectInputStream objInput) throws IOException {
-		sourceID = objInput.readUTF();
-		sourceType = objInput.readInt();
-		previousValue = objInput.readInt();
-		int guildLength = objInput.readInt();
-		for (int index = 0; index < guildLength; index++) {
-			this.add(StatPinger.jda.getGuildById(objInput.readLong()));
+	/**
+	 * Takes serialized data from a file and places it into a new StatSource.
+	 * @param file - The file to read from
+	 * @throws UnsupportedOperationException if this instance has already contains data
+	 * @throws FileNotFoundException if the supplied file could not be found
+	 */
+	public void deserialize(File file) throws UnsupportedOperationException, FileNotFoundException {
+		if (this.sourceID != null && this.sourceType != 0) 
+			throw new UnsupportedOperationException("This instance of StatSouce already contains "
+					+ "complete data and should not be deserialized to!");
+		Scanner input = new Scanner(file);
+		this.sourceID = input.nextLine();
+		this.sourceType = Integer.parseInt(input.nextLine());
+		this.previousValue = Integer.parseInt(input.nextLine());
+		while (input.hasNextLine()) {
+			String guildID = input.nextLine();
+			this.add(StatPinger.jda.getGuildById(guildID));
+		}
+		input.close();
+		System.out.println("Finished importing this source: " + sourceID + " of type " + sourceType);
+		System.out.println(this.size() + " guilds.");
+		for (Guild g : this) {
+			System.out.println(g.getName());
 		}
 	}
 	
-	private void writeObject(ObjectOutputStream objOutput) throws IOException, ClassNotFoundException {
-		System.out.println("MADE IT TO WRITE");
-		objOutput.writeUTF(sourceID);
-		objOutput.writeInt(sourceType);
-		objOutput.writeInt(previousValue);
-		objOutput.writeInt(this.size());
-		for (Guild guild : this) {
-			objOutput.writeLong(guild.getIdLong());
-		}
-		
+	/**
+	 * Takes this StatSource object and serializes it to a file for recover after restarts.
+	 * @param file - The file to write to
+	 * @throws IOException if an error occurs while writing the file
+	 */
+	public void serialize(File file) throws IOException {
+		FileWriter output = new FileWriter(file);
+		output.append(sourceID + "\n");
+		output.append(sourceType + "\n");
+		output.append(previousValue + "\n");
+		if (!this.isEmpty())
+			for (Guild g : this) {
+				output.append(g.getId());	
+			}
+		output.close();
 	}
 }
