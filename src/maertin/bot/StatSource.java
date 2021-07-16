@@ -10,8 +10,8 @@ import java.util.Scanner;
 import net.dv8tion.jda.api.entities.Guild;
 
 /**
- * @author maertin
  * Container for one statistic source's info <b>and</b> the Guilds listening to it.
+ * @author maertin
  */
 @SuppressWarnings("serial")
 public class StatSource extends ArrayList<Guild> {
