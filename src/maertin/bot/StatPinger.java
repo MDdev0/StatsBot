@@ -20,7 +20,7 @@ public class StatPinger {
 			"ODU0MDczMjIwODY0MDE2NDQ0.YMenqw.OZLQ5yn_evfWQlFou20M9zpP52w";
 	public static JDA jda;
 	public static final String PREFIX = "$";
-	public static final long REFRESH_RATE = 10000L;
+	public static final long REFRESH_RATE = 30000L;
 	
 	/**
 	 * Sources are stored as StatSource objects.<p>
