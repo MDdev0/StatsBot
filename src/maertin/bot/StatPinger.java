@@ -64,7 +64,11 @@ public class StatPinger {
 				try {
 					StatSource source = new StatSource();
 					source.deserialize(save);
-					sources.add(source);
+					// Only add the source to the array if there are any servers listening to it, otherwise discard
+					if (!source.isEmpty())
+						sources.add(source);
+					else
+						System.out.println("Not loading empty source: " + save.getName());
 				} catch (IOException | NoSuchElementException e) {
 					System.out.println("Unable to load source:");
 					System.out.println(save.getAbsolutePath());
@@ -72,7 +76,7 @@ public class StatPinger {
 				}
 			}
 		} else {
-			System.out.println("NOT A DIRECTORY! No saves loaded.");
+			System.out.println("Unable to create directory! No saves loaded.");
 		}
 	}
 	

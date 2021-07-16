@@ -126,14 +126,22 @@ public class StatSource extends ArrayList<Guild> {
 		this.previousValue = Integer.parseInt(input.nextLine());
 		while (input.hasNextLine()) {
 			String guildID = input.nextLine();
-			this.add(StatPinger.jda.getGuildById(guildID));
+			try {
+				this.add(StatPinger.jda.getGuildById(guildID));
+			} catch (NumberFormatException nfe) {
+				System.out.println("Error importing this source: " + sourceID + " of type " + sourceType);
+				System.out.println(nfe.getMessage());
+				System.out.println("Supplied Guild ID: " + guildID);
+			}
 		}
 		input.close();
-		System.out.println("Finished importing this source: " + sourceID + " of type " + sourceType);
-		System.out.println(this.size() + " guilds.");
-		for (Guild g : this) {
-			System.out.println(g.getName());
-		}
+		
+		// Debug code
+//		System.out.println("Finished importing this source: " + sourceID + " of type " + sourceType);
+//		System.out.println(this.size() + " guilds.");
+//		for (Guild g : this) {
+//			System.out.println(g.getName());
+//		}
 	}
 	
 	/**
