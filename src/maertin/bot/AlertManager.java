@@ -91,6 +91,8 @@ public class AlertManager {
 		
 		// Send message to all subscribed guilds
 		for (Guild g : source) {
+			alert.setFooter((source.size() == 1 ? "You were the only server to get this alert!" : 
+				source.size()-1 + " other servers got this alert."), g.getIconUrl());
 			try {
 				g.getTextChannelsByName("stat-pings", true).get(0).sendTyping().queue();
 				g.getTextChannelsByName("stat-pings", true).get(0).sendMessage(alert.build()).queue();
