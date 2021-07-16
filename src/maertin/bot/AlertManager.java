@@ -24,11 +24,11 @@ public class AlertManager {
 			for (int s = 0; s < StatPinger.sources.size(); s++) {
 				StatPinger.sources.set(s, refreshSource(StatPinger.sources.get(s)));
 			}
-//			// Update status just for fun
-//			StatPinger.jda.getPresence().setPresence(OnlineStatus.ONLINE, 
-//					Activity.playing("with save data. " + StatPinger.sources.size() + " sources being saved!"));
-//			// Save all sources to disk
-//			StatPinger.saveAll();
+			// Update status just for fun
+			StatPinger.jda.getPresence().setPresence(OnlineStatus.ONLINE, 
+					Activity.playing("with save data. " + StatPinger.sources.size() + " sources being saved!"));
+			// Save all sources to disk
+			StatPinger.saveAll();
 			// Update status just for fun
 			StatPinger.jda.getPresence().setPresence(OnlineStatus.IDLE, 
 					Activity.watching(StatPinger.sources.size() + " sources."));

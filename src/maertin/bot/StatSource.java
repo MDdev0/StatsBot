@@ -1,5 +1,9 @@
 package maertin.bot;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import net.dv8tion.jda.api.entities.Guild;
@@ -8,8 +12,12 @@ import net.dv8tion.jda.api.entities.Guild;
  * @author maertin
  * Container for one statistic source's info <b>and</b> the Guilds listening to it.
  */
-@SuppressWarnings("serial")
-public class StatSource extends ArrayList<Guild> {
+public class StatSource extends ArrayList<Guild> implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5270083730453085977L;
 
 	// These are all the supported sources. 
 	public static final int YOUTUBE_SUBSCRIBER = 0;
@@ -95,5 +103,29 @@ public class StatSource extends ArrayList<Guild> {
 	 */
 	public boolean equals(Object o) {
 		return equalsIgnoreGuilds(o);
+	}
+	
+	// SERIALIZATION STUFF
+	
+	private void readObject(ObjectInputStream objInput) throws IOException {
+		sourceID = objInput.readUTF();
+		sourceType = objInput.readInt();
+		previousValue = objInput.readInt();
+		int guildLength = objInput.readInt();
+		for (int index = 0; index < guildLength; index++) {
+			this.add(StatPinger.jda.getGuildById(objInput.readLong()));
+		}
+	}
+	
+	private void writeObject(ObjectOutputStream objOutput) throws IOException, ClassNotFoundException {
+		System.out.println("MADE IT TO WRITE");
+		objOutput.writeUTF(sourceID);
+		objOutput.writeInt(sourceType);
+		objOutput.writeInt(previousValue);
+		objOutput.writeInt(this.size());
+		for (Guild guild : this) {
+			objOutput.writeLong(guild.getIdLong());
+		}
+		
 	}
 }
