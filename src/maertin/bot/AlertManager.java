@@ -1,6 +1,8 @@
 package maertin.bot;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -62,7 +64,8 @@ public class AlertManager {
 					source.updatePrevValue(channel.getSubCount());
 				}
 			} catch (IOException e) {
-				System.out.println("Unable to get data for source " + source.getID() + " of type " + source.getType());
+				String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss;SSS").format(new Date());
+				System.out.println("[" + timestamp + "] Unable to get data for source " + source.getID() + " of type " + source.getType());
 				e.printStackTrace();
 			}
 			break;

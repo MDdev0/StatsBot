@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 import net.dv8tion.jda.api.entities.Guild;
@@ -129,7 +131,8 @@ public class StatSource extends ArrayList<Guild> {
 			try {
 				this.add(StatPinger.jda.getGuildById(guildID));
 			} catch (NumberFormatException nfe) {
-				System.out.println("Error importing this source: " + sourceID + " of type " + sourceType);
+				String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss;SSS").format(new Date());
+				System.out.println("[" + timestamp + "] Error importing a guild to this source: " + sourceID + " of type " + sourceType);
 				System.out.println(nfe.getMessage());
 				System.out.println("Supplied Guild ID: " + guildID);
 			}

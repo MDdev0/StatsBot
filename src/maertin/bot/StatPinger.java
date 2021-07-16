@@ -2,7 +2,9 @@ package maertin.bot;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.NoSuchElementException;
 
 import javax.security.auth.login.LoginException;
@@ -20,7 +22,7 @@ public class StatPinger {
 			"ODU0MDczMjIwODY0MDE2NDQ0.YMenqw.OZLQ5yn_evfWQlFou20M9zpP52w";
 	public static JDA jda;
 	public static final String PREFIX = "$";
-	public static final long REFRESH_RATE = 30000L;
+	public static final long REFRESH_RATE = 20000L;
 	
 	/**
 	 * Sources are stored as StatSource objects.<p>
@@ -70,7 +72,8 @@ public class StatPinger {
 					else
 						System.out.println("Not loading empty source: " + save.getName());
 				} catch (IOException | NoSuchElementException e) {
-					System.out.println("Unable to load source:");
+					String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss;SSS").format(new Date());
+					System.out.println("[" + timestamp + "] Unable to load source:");
 					System.out.println(save.getAbsolutePath());
 					e.printStackTrace();
 				}
@@ -91,7 +94,8 @@ public class StatPinger {
 							) + "_" + source.getID() + ".dat");
 				source.serialize(saveFile);
 			} catch (IOException e) {
-				System.out.println("Unable to save source:");
+				String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss;SSS").format(new Date());
+				System.out.println("[" + timestamp + "] Unable to save source:");
 				System.out.println(source.getID() + " of type " + source.getType());
 				e.printStackTrace();
 			}
