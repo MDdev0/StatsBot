@@ -1,6 +1,8 @@
 package maertin.bot;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,11 +26,11 @@ public class AlertManager {
 			for (int s = 0; s < StatPinger.sources.size(); s++) {
 				StatPinger.sources.set(s, refreshSource(StatPinger.sources.get(s)));
 			}
-//			// Update status just for fun
-//			StatPinger.jda.getPresence().setPresence(OnlineStatus.ONLINE, 
-//					Activity.playing("with save data. " + StatPinger.sources.size() + " sources being saved!"));
-//			// Save all sources to disk
-//			StatPinger.saveAll();
+			// Update status just for fun
+			StatPinger.jda.getPresence().setPresence(OnlineStatus.ONLINE, 
+					Activity.playing("with save data. " + StatPinger.sources.size() + " sources being saved!"));
+			// Save all sources to disk
+			StatPinger.saveAll();
 			// Update status just for fun
 			StatPinger.jda.getPresence().setPresence(OnlineStatus.IDLE, 
 					Activity.watching(StatPinger.sources.size() + " sources."));
@@ -62,7 +64,8 @@ public class AlertManager {
 					source.updatePrevValue(channel.getSubCount());
 				}
 			} catch (IOException e) {
-				System.out.println("Unable to get data for source " + source.getID() + " of type " + source.getType());
+				String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss;SSS").format(new Date());
+				System.out.println("[" + timestamp + "] Unable to get data for source " + source.getID() + " of type " + source.getType());
 				e.printStackTrace();
 			}
 			break;
@@ -91,6 +94,8 @@ public class AlertManager {
 		
 		// Send message to all subscribed guilds
 		for (Guild g : source) {
+			alert.setFooter((source.size() == 1 ? "You were the only server to get this alert!" : 
+				source.size()-1 + " other servers got this alert."), g.getIconUrl());
 			try {
 				g.getTextChannelsByName("stat-pings", true).get(0).sendTyping().queue();
 				g.getTextChannelsByName("stat-pings", true).get(0).sendMessage(alert.build()).queue();

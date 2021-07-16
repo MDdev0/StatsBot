@@ -1,18 +1,25 @@
 package maertin.bot;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
 
 import net.dv8tion.jda.api.entities.Guild;
 
 /**
- * @author maertin
  * Container for one statistic source's info <b>and</b> the Guilds listening to it.
+ * @author maertin
  */
 @SuppressWarnings("serial")
 public class StatSource extends ArrayList<Guild> {
 
 	// These are all the supported sources. 
-	public static final int YOUTUBE_SUBSCRIBER = 0;
+	public static final int YOUTUBE_SUBSCRIBER = 1;
 	
 	// Instance Variables
 	private String sourceID;
@@ -26,10 +33,11 @@ public class StatSource extends ArrayList<Guild> {
 	 * @param type - The type of source this represents. 
 	 */
 	public StatSource(String id, int type) {
-		super();
 		sourceID = id;
 		sourceType = type;
 	}
+	
+	public StatSource() {}
 	
 	/**
 	 * @return The source's ID as a String.
@@ -88,12 +96,71 @@ public class StatSource extends ArrayList<Guild> {
 	}
 	
 	@Override
-	//SCUFFED
+	//SCUFFED EQUALS METHOD
 	/**
 	 * Yes, I know this is probably a scuffed way of doing things.
 	 * I do it so I can use ArrayList.contains on the main list.
 	 */
 	public boolean equals(Object o) {
 		return equalsIgnoreGuilds(o);
+	}
+	
+	/*
+	 * SCUFFED SERIALIZATION STUFF
+	 * All of this code is probably TERRIBLE, but I have
+	 * no clue how to do serialization properly in this scenario.
+	 * Too bad, I guess.
+	 */
+	
+	/**
+	 * Takes serialized data from a file and places it into a new StatSource.
+	 * @param file - The file to read from
+	 * @throws UnsupportedOperationException if this instance has already contains data
+	 * @throws FileNotFoundException if the supplied file could not be found
+	 */
+	public void deserialize(File file) throws UnsupportedOperationException, FileNotFoundException {
+		if (this.sourceID != null && this.sourceType != 0) 
+			throw new UnsupportedOperationException("This instance of StatSouce already contains "
+					+ "complete data and should not be deserialized to!");
+		Scanner input = new Scanner(file);
+		this.sourceID = input.nextLine();
+		this.sourceType = Integer.parseInt(input.nextLine());
+		this.previousValue = Integer.parseInt(input.nextLine());
+		while (input.hasNextLine()) {
+			String guildID = input.nextLine();
+			try {
+				this.add(StatPinger.jda.getGuildById(guildID));
+			} catch (NumberFormatException nfe) {
+				String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss;SSS").format(new Date());
+				System.out.println("[" + timestamp + "] Error importing a guild to this source: " + sourceID + " of type " + sourceType);
+				System.out.println(nfe.getMessage());
+				System.out.println("Supplied Guild ID: " + guildID);
+			}
+		}
+		input.close();
+		
+		// Debug code
+//		System.out.println("Finished importing this source: " + sourceID + " of type " + sourceType);
+//		System.out.println(this.size() + " guilds.");
+//		for (Guild g : this) {
+//			System.out.println(g.getName());
+//		}
+	}
+	
+	/**
+	 * Takes this StatSource object and serializes it to a file for recover after restarts.
+	 * @param file - The file to write to
+	 * @throws IOException if an error occurs while writing the file
+	 */
+	public void serialize(File file) throws IOException {
+		FileWriter output = new FileWriter(file);
+		output.append(sourceID + "\n");
+		output.append(sourceType + "\n");
+		output.append(previousValue + "\n");
+		if (!this.isEmpty())
+			for (Guild g : this) {
+				output.append(g.getId());	
+			}
+		output.close();
 	}
 }
