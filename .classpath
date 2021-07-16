@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-15">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Application Files/Eclipse/Workspaces/Discord/StatsBot/lib/JDA-4.3.0_277-withDependencies.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Application%20Files/Eclipse/Workspaces/Discord/StatsBot/lib/JDA-4.3.0_277-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Application Files/Eclipse/Workspaces/Discord/StatsBot/lib/jsoup-1.13.1.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/D:/Application%20Files/Eclipse/Workspaces/Discord/StatsBot/lib/jsoup-1.13.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
