@@ -18,8 +18,6 @@ import net.dv8tion.jda.api.entities.Activity;
 
 public class StatPinger {
 	// JDA info
-	private static final String TOKEN = 
-			"ODU0MDczMjIwODY0MDE2NDQ0.YMenqw.OZLQ5yn_evfWQlFou20M9zpP52w";
 	public static JDA jda;
 	public static final String PREFIX = "$";
 	public static final long REFRESH_RATE = 20000L;
@@ -34,7 +32,7 @@ public class StatPinger {
 	private static AlertManager alerts;
 	
 	public static void main(String[] args) throws LoginException, IOException, InterruptedException {
-		jda = JDABuilder.createLight(TOKEN).build();
+		jda = JDABuilder.createLight(args[0]).build();
 		jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.listening("error logs and loading saved sources!"));
 		
 		jda.awaitReady();
