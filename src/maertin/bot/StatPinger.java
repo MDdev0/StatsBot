@@ -20,7 +20,8 @@ public class StatPinger {
 	// JDA info
 	public static JDA jda;
 	public static final String PREFIX = "$";
-	public static final long REFRESH_RATE = 20000L;
+	public static long REFRESH_RATE = 20000L;
+	public static long QUERY_TIMEOUT = 5000L;
 	
 	/**
 	 * Sources are stored as StatSource objects.<p>
@@ -31,7 +32,19 @@ public class StatPinger {
 	@SuppressWarnings("unused")
 	private static AlertManager alerts;
 	
+	// Arguments: <JDA token> [Refresh rate] [Query timeout]
 	public static void main(String[] args) throws LoginException, IOException, InterruptedException {
+		// Interpret Arguments
+		if (args.length == 0) {
+			System.out.println("Unable to initialize bot without a token!");
+			return;
+		}
+		switch (args.length) {
+			case 3:
+				QUERY_TIMEOUT = Long.parseLong(args[3]);
+			case 2:
+				REFRESH_RATE = Long.parseLong(args[2]);
+		}
 		jda = JDABuilder.createLight(args[0]).build();
 		jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.listening("error logs and loading saved sources!"));
 		

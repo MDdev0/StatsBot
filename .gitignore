@@ -5,7 +5,13 @@
 *.log
 
 # Data files
-*.dat
+saves/*
+
+# Eclipse files
+.classpath
+.project
+.settings/*
+*.prefs
 
 # BlueJ files
 *.ctxt
