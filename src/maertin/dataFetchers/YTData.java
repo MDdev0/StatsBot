@@ -17,7 +17,8 @@ public class YTData {
 	 * @throws IOException in case of any error
 	 */
 	public static String getChannelID(String url) throws IOException {
-		return Jsoup.connect(url).get().getElementsByAttributeValue("itemprop", "channelId").attr("content");
+		// CONNECTION TIMES OUT AFTER 5 SECONDS! See AlertManager for handling of timeouts. 
+		return Jsoup.connect(url).timeout(5000).get().getElementsByAttributeValue("itemprop", "channelId").attr("content");
 	}
 	
 	/**

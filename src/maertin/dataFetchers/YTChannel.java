@@ -25,7 +25,8 @@ public class YTChannel {
 	 */
 	public YTChannel(String channelID) throws IOException {
 		this.channelID = channelID;
-		final String apiText = Jsoup.connect("https://mixerno.space/api/yt/channel/" + channelID).get().text();
+		// CONNECTION TIMES OUT AFTER 5 SECONDS! See AlertManager for handling of timeouts. 
+		final String apiText = Jsoup.connect("https://mixerno.space/api/yt/channel/" + channelID).timeout(5000).get().text();
 		this.channelName = apiText.substring(apiText.indexOf("\"channel\": { \"title\": \"") + 23);
 		this.channelName = this.channelName.substring(0, this.channelName.indexOf('"'));
 		this.channelIcon = apiText.substring(apiText.indexOf("\"high\": { \"url\": \"") + 18);
