@@ -21,7 +21,7 @@ public class StatPinger {
 	public static JDA jda;
 	public static final String PREFIX = "$";
 	public static long REFRESH_RATE = 20000L;
-	public static long QUERY_TIMEOUT = 5000L;
+	public static int QUERY_TIMEOUT = 5000;
 	
 	/**
 	 * Sources are stored as StatSource objects.<p>
@@ -40,10 +40,11 @@ public class StatPinger {
 			return;
 		}
 		switch (args.length) {
-			case 3:
-				QUERY_TIMEOUT = Long.parseLong(args[3]);
-			case 2:
-				REFRESH_RATE = Long.parseLong(args[2]);
+		case 3:
+			QUERY_TIMEOUT = Integer.parseInt(args[3]);
+		//$FALL-THROUGH$
+		case 2:
+			REFRESH_RATE = Long.parseLong(args[2]);
 		}
 		jda = JDABuilder.createLight(args[0]).build();
 		jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.listening("error logs and loading saved sources!"));
