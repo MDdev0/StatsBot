@@ -130,6 +130,7 @@ public class StatSource extends ArrayList<Guild> {
 			String guildID = input.nextLine();
 			try {
 				this.add(StatPinger.jda.getGuildById(guildID));
+				
 			} catch (NumberFormatException nfe) {
 				String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss;SSS").format(new Date());
 				System.out.println("[" + timestamp + "] Error importing a guild to this source: " + sourceID + " of type " + sourceType);
@@ -152,6 +153,7 @@ public class StatSource extends ArrayList<Guild> {
 	 * @param file - The file to write to
 	 * @throws IOException if an error occurs while writing the file
 	 */
+	@SuppressWarnings("resource") // output does get closed.
 	public void serialize(File file) throws IOException {
 		FileWriter output = new FileWriter(file);
 		output.append(sourceID + "\n");

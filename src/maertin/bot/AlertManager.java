@@ -53,11 +53,14 @@ public class AlertManager {
 					e.printStackTrace();
 				}
 			}
-			// Update status just for fun
-			StatPinger.jda.getPresence().setPresence(OnlineStatus.ONLINE, 
-					Activity.playing("with save data. " + StatPinger.sources.size() + " sources being saved!"));
 			// Save all sources to disk
 			StatPinger.saveAll();
+			
+			// Update status just for fun
+			StatPinger.jda.getPresence().setPresence(OnlineStatus.ONLINE, 
+					Activity.playing("data to " + StatPinger.guilds.size() + " servers!"));
+			// Refresh member guilds
+			
 			// Update status just for fun
 			StatPinger.jda.getPresence().setPresence(OnlineStatus.IDLE, 
 					Activity.watching(StatPinger.sources.size() + " sources."));

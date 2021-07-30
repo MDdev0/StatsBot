@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
 
 public class StatPinger {
 	// JDA info
@@ -28,6 +29,7 @@ public class StatPinger {
 	 * Each StatSource object contains another list of the Guilds listening to it.<p>
 	 */
 	public static ArrayList<StatSource> sources = new ArrayList<StatSource>();
+	public static ArrayList<GuildStats> guilds = new ArrayList<GuildStats>();
 	
 	@SuppressWarnings("unused")
 	private static AlertManager alerts;
@@ -111,6 +113,18 @@ public class StatPinger {
 				System.out.println(source.getID() + " of type " + source.getType());
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	/**
+	 * Refreshes list of guilds the bot has joined
+	 */
+	@SuppressWarnings("unlikely-arg-type")
+	public static void refreshGuilds() {
+		for (Guild g : jda.getGuilds()) {
+			// SCUFFED: Unconventional but it should work
+			if (!guilds.contains(g))
+				guilds.add(new GuildStats(g.getIdLong()));
 		}
 	}
 }
