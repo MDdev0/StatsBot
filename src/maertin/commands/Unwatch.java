@@ -63,6 +63,9 @@ public class Unwatch extends ListenerAdapter {
 					else // Replace the source in the list with the updated one
 						StatPinger.sources.set(index, source);
 					
+					// Clear the file
+					StatPinger.clearFile(source);
+					
 					// Success Message
 					msg.getChannel().sendMessage(SUCCESS.addField(channel.getChannelName(), "**Tracking:** Subscriber Count", false)
 							.setThumbnail(channel.getChannelIcon()).build()).queue();

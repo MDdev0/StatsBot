@@ -9,9 +9,7 @@ import java.util.NoSuchElementException;
 
 import javax.security.auth.login.LoginException;
 
-import maertin.commands.Bug;
-import maertin.commands.Unwatch;
-import maertin.commands.Watch;
+import maertin.commands.*;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -43,10 +41,12 @@ public class StatPinger {
 		}
 		switch (args.length) {
 		case 3:
-			QUERY_TIMEOUT = Integer.parseInt(args[3]);
+			QUERY_TIMEOUT = Integer.parseInt(args[2]);
+			System.out.println("[LAUNCHING] Query Timeout set to: " + QUERY_TIMEOUT + "ms");
 		//$FALL-THROUGH$
 		case 2:
-			REFRESH_RATE = Long.parseLong(args[2]);
+			REFRESH_RATE = Long.parseLong(args[1]);
+			System.out.println("[LAUNCHING] Refresh Rate set to: " + REFRESH_RATE + "ms");
 		}
 		jda = JDABuilder.createLight(args[0]).build();
 		jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.listening("error logs and loading saved sources!"));
@@ -56,6 +56,7 @@ public class StatPinger {
 		loadAll();
 		
 		jda.addEventListener(new Bug());
+		jda.addEventListener(new Help());
 		jda.addEventListener(new Watch());
 		jda.addEventListener(new Unwatch());
 		

@@ -23,6 +23,10 @@ Get pings in your discord servers whenever statistics about someone on the inter
 	Report a bug.<br>
 	`$bug`<p>
 
+- Help<br>
+	Get help on the bot commands.<br>
+	`$help`<p>
+
 - More commands coming soon
 
 ## Supported Source Types
