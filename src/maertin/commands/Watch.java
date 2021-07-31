@@ -36,7 +36,7 @@ public class Watch extends ListenerAdapter {
 				
 				//=======================
 				// Check if type is YouTube Subscribers
-				if (args.get(1).contains("youtube.com/channel/")
+				if ( (args.get(1).contains("youtube.com/channel/") || args.get(1).contains("youtube.com/user/"))
 						&& args.get(2).equalsIgnoreCase("subscribers")) {
 					try {
 						YTChannel channel = new YTChannel(YTData.getChannelID(args.get(1)));
