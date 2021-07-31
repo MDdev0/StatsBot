@@ -41,7 +41,7 @@ public class Unwatch extends ListenerAdapter {
 				if ( (args.get(1).contains("youtube.com/channel/") || args.get(1).contains("youtube.com/user/"))
 						&& args.get(2).equalsIgnoreCase("subscribers")) {
 					try {
-					YTChannel channel = new YTChannel(YTData.getChannelID(args.get(2)));
+					YTChannel channel = new YTChannel(YTData.getChannelID(args.get(1)));
 					
 					// Find source
 					int index = StatPinger.sources.indexOf(new StatSource(channel.getChannelID(), StatSource.YOUTUBE_SUBSCRIBER));
