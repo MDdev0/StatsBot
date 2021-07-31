@@ -60,7 +60,6 @@ public class Unwatch extends ListenerAdapter {
 					
 					if (source.size() == 0) // Delete the source altogether if none are left
 						StatPinger.sources.remove(index);
-						// FIXME: This creates a bug where sources that are totally removed will reappear when the bot restarts!
 					else // Replace the source in the list with the updated one
 						StatPinger.sources.set(index, source);
 					
