@@ -16,11 +16,6 @@ saves/*
 # BlueJ files
 *.ctxt
 
-# Eclipse files
-.project
-.classpath
-.settings/*
-
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 

@@ -9,6 +9,8 @@ import java.util.NoSuchElementException;
 
 import javax.security.auth.login.LoginException;
 
+import maertin.commands.Bug;
+import maertin.commands.Unwatch;
 import maertin.commands.Watch;
 
 import net.dv8tion.jda.api.JDA;
@@ -53,7 +55,9 @@ public class StatPinger {
 		
 		loadAll();
 		
+		jda.addEventListener(new Bug());
 		jda.addEventListener(new Watch());
+		jda.addEventListener(new Unwatch());
 		
 		alerts = new AlertManager();
 	}
@@ -111,6 +115,29 @@ public class StatPinger {
 				System.out.println(source.getID() + " of type " + source.getType());
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	/**
+	 * Removes an item from the saves if it needs to be deleted.
+	 */
+	public static void clearFile(StatSource source) {
+		File saveFile = new File( "saves/" + (
+			source.getType() == StatSource.YOUTUBE_SUBSCRIBER ? "YTSub" : "UNKNOWN" // source.getType() == 0 ? "YTSub" : source.getType() == 1 ? "ETC" : "ETC"
+		) + "_" + source.getID() + ".dat");
+		String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss;SSS").format(new Date());
+		try {
+			if (saveFile.delete()) {
+				System.out.println("[" + timestamp + "] Source deleted:");
+				System.out.println(source.getID() + " of type " + source.getType());
+			} else {
+				System.out.println("[" + timestamp + "] Could not delete source:");
+				System.out.println(source.getID() + " of type " + source.getType());
+			}
+		} catch (Exception e) {
+			System.out.println("[" + timestamp + "] Error deleting source:");
+			System.out.println(source.getID() + " of type " + source.getType());
+			e.printStackTrace();
 		}
 	}
 }

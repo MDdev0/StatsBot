@@ -13,22 +13,24 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class Watch extends ListenerAdapter {
+public class Unwatch extends ListenerAdapter {
 	
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent msg) {
-		// These need to be reset every message
+		// Return messages need to be reset every time
 		final EmbedBuilder SUCCESS = new EmbedBuilder().setTitle("✅ Success!").setColor(0x2dd52d)
-				.setDescription("Your guild will now be notified about the following source. Use `" + StatPinger.PREFIX + "unwatch` to remove it later.");
+				.setDescription("Your guild will no longer be notified about the following source. Use `" + StatPinger.PREFIX + "watch` to add it again later.");
 		final EmbedBuilder ERROR_UNKNOWN = new EmbedBuilder().setTitle("⛔ Error").setColor(0xe0143e).setDescription(
-				"An unknown error occured while trying to watch this source. Maybe try another one or try again later?")
+				"An unknown error occured while trying to remove this source. Maybe try another one or try again later?")
 				.setFooter("This message will be deleted in 60 seconds.");
+		final EmbedBuilder WARNING_NOTFOUND = new EmbedBuilder().setTitle("⚠ Source Not Found").setColor(0xefef32).setDescription(
+				"Unable to remove the source because this server is not listening to it!").setFooter("This message will be deleted in 60 seconds.");
 		final EmbedBuilder WARNING_SYNTAX = new EmbedBuilder().setTitle("⚠ Improper Syntax").setColor(0xefef32).setFooter("This message will be deleted in 60 seconds.")
-				.addField("YouTube Subscriber Count:", "`" + StatPinger.PREFIX + "watch` `youtube.com/channel/#######` `subscribers`", false);
-		
+				.addField("YouTube Subscriber Count:", "`" + StatPinger.PREFIX + "unwatch` `youtube.com/channel/#######` `subscribers`", false);
+	
 		List<String> args = Arrays.asList(msg.getMessage().getContentRaw().split("\\s+"));
 		
-		if (args.get(0).equalsIgnoreCase(StatPinger.PREFIX + "watch")) {
+		if (args.get(0).equalsIgnoreCase(StatPinger.PREFIX + "unwatch")) {
 			// Arguments check
 			if (args.size() < 3) {
 				msg.getChannel().sendMessage(WARNING_SYNTAX.setDescription("Not enough arguments! Here's the proper syntax:").build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
@@ -39,27 +41,31 @@ public class Watch extends ListenerAdapter {
 				if ( (args.get(1).contains("youtube.com/channel/") || args.get(1).contains("youtube.com/user/"))
 						&& args.get(2).equalsIgnoreCase("subscribers")) {
 					try {
-						YTChannel channel = new YTChannel(YTData.getChannelID(args.get(1)));
-						StatSource newSource = new StatSource(channel.getChannelID(), StatSource.YOUTUBE_SUBSCRIBER);
-						
-						// Add the guild to the list of guilds if the source already exists
-						if (StatPinger.sources.contains(newSource)) {
-							int index = StatPinger.sources.indexOf(newSource);
-							// Copy current data from list into newSource
-							newSource = StatPinger.sources.get(index);
-							// Add the guild to the list
-							newSource.add(msg.getGuild());
-							// Put it back
-							StatPinger.sources.set(index, newSource);
-						}
-						// Otherwise, add a new source and add the guild
-						else {
-							newSource.add(msg.getGuild());
-							StatPinger.sources.add(newSource);
-						}
-						// Success Message
-						msg.getChannel().sendMessage(SUCCESS.addField(channel.getChannelName(), "**Tracking:** Subscriber Count", false)
-								.setThumbnail(channel.getChannelIcon()).build()).queue();
+					YTChannel channel = new YTChannel(YTData.getChannelID(args.get(1)));
+					
+					// Find source
+					int index = StatPinger.sources.indexOf(new StatSource(channel.getChannelID(), StatSource.YOUTUBE_SUBSCRIBER));
+					// If source isn't found
+					if (index == -1) {
+						msg.getChannel().sendMessage(WARNING_NOTFOUND.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
+						return; // ENDS HERE IF NOT FOUND
+					}
+					
+					// Remove guild from source
+					StatSource source = StatPinger.sources.get(index);
+					if (!source.remove(msg.getGuild())) {
+						msg.getChannel().sendMessage(WARNING_NOTFOUND.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
+						return; // ENDS HERE IF NOT FOUND
+					}
+					
+					if (source.size() == 0) // Delete the source altogether if none are left
+						StatPinger.sources.remove(index);
+					else // Replace the source in the list with the updated one
+						StatPinger.sources.set(index, source);
+					
+					// Success Message
+					msg.getChannel().sendMessage(SUCCESS.addField(channel.getChannelName(), "**Tracking:** Subscriber Count", false)
+							.setThumbnail(channel.getChannelIcon()).build()).queue();
 					} catch (Exception e) {
 						// TODO Maybe be a little more descriptive? Just an option.
 						// Error Message
@@ -68,7 +74,6 @@ public class Watch extends ListenerAdapter {
 					}
 				}
 				//=======================
-				// Syntax Error
 				else
 					msg.getChannel().sendMessage(WARNING_SYNTAX.setDescription("I couldn't understand that request! Here's the proper syntax:").build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
 			}
