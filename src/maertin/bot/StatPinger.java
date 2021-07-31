@@ -9,6 +9,8 @@ import java.util.NoSuchElementException;
 
 import javax.security.auth.login.LoginException;
 
+import maertin.commands.Bug;
+import maertin.commands.Unwatch;
 import maertin.commands.Watch;
 
 import net.dv8tion.jda.api.JDA;
@@ -53,7 +55,9 @@ public class StatPinger {
 		
 		loadAll();
 		
+		jda.addEventListener(new Bug());
 		jda.addEventListener(new Watch());
+		jda.addEventListener(new Unwatch());
 		
 		alerts = new AlertManager();
 	}

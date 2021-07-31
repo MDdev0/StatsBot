@@ -15,10 +15,11 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Watch extends ListenerAdapter {
 	
+	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent msg) {
 		// These need to be reset every message
 		final EmbedBuilder SUCCESS = new EmbedBuilder().setTitle("✅ Success!").setColor(0x2dd52d)
-				.setDescription("Your guild will now be notified about the following source:");
+				.setDescription("Your guild will now be notified about the following source. Use `" + StatPinger.PREFIX + "unwatch` to remove it later.");
 		final EmbedBuilder ERROR_UNKNOWN = new EmbedBuilder().setTitle("⛔ Error").setColor(0xe0143e).setDescription(
 				"An unknown error occured while trying to watch this source. Maybe try another one or try again later?")
 				.setFooter("This message will be deleted in 60 seconds.");
@@ -33,6 +34,7 @@ public class Watch extends ListenerAdapter {
 				msg.getChannel().sendMessage(WARNING_SYNTAX.setDescription("Not enough arguments! Here's the proper syntax:").build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
 			} else {
 				
+				//=======================
 				// Check if type is YouTube Subscribers
 				if (args.get(1).contains("youtube.com/channel/")
 						&& args.get(2).equalsIgnoreCase("subscribers")) {
@@ -65,10 +67,10 @@ public class Watch extends ListenerAdapter {
 						e.printStackTrace();
 					}
 				}
+				//=======================
 				// Syntax Error
-				else {
+				else
 					msg.getChannel().sendMessage(WARNING_SYNTAX.setDescription("I couldn't understand that request! Here's the proper syntax:").build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
-				}
 			}
 		}
 	}
