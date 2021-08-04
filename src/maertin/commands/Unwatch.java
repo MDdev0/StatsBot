@@ -71,7 +71,7 @@ public class Unwatch extends ListenerAdapter {
 					msg.getChannel().sendMessage(SUCCESS.addField(channel.getChannelName(), "**Tracking:** Subscriber Count", false)
 							.setThumbnail(channel.getChannelIcon()).build()).queue();
 					} catch (Exception e) {
-						// TODO Maybe be a little more descriptive? Just an option.
+						// XXX Maybe be a little more descriptive? Just an option.
 						// Error Message
 						msg.getChannel().sendMessage(ERROR_UNKNOWN.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
 						e.printStackTrace();

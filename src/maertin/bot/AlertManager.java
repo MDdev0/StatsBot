@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class AlertManager {
-	// TODO instance variables
+	
 	static Timer timer = new Timer();
 	
 	static TimerTask refreshAll = new TimerTask() {

@@ -18,7 +18,7 @@ public class YTChannel {
 	private int subCount;
 	
 	/**
-	 * Builds an instance of a YTChannel.
+	 * Builds an instance of a YTChannel.<br>
 	 * Uses the Mixerno API to get the information needed.
 	 * @param channelID - String of YouTube Channel ID.
 	 * THIS IS NOT ALWAYS THE CHANNEL URL!

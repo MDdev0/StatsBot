@@ -24,7 +24,7 @@ public class StatSource extends ArrayList<Guild> {
 
 	public enum SourceType {
 		YTSub, // YouTube Subscribers
-		TweetFollow // Twitter Followers
+		TweetFollow // TODO: Coming soon :)
 	}
 	
 	// Instance Variables
