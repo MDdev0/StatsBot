@@ -15,9 +15,13 @@ import net.dv8tion.jda.api.entities.Guild;
  * Container for one statistic source's info <b>and</b> the Guilds listening to it.
  * @author maertin
  */
-@SuppressWarnings("serial")
 public class StatSource extends ArrayList<Guild> {
 	
+	/**
+	 * Used with DataVersion for serialize and deserialize
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public enum SourceType {
 		YTSub, // YouTube Subscribers
 		TweetFollow // Twitter Followers
@@ -118,13 +122,32 @@ public class StatSource extends ArrayList<Guild> {
 	 * Takes serialized data from a file and places it into a new StatSource.
 	 * @param file - The file to read from
 	 * @throws UnsupportedOperationException if this instance has already contains data
-	 * @throws FileNotFoundException if the supplied file could not be found
+	 * @throws IOException if the supplied file could not be found or if there was an error updating the file
 	 */
-	public void deserialize(File file) throws UnsupportedOperationException, FileNotFoundException {
+	public void deserialize(File file) throws UnsupportedOperationException, IOException {
 		if (this.sourceID != null && this.sourceType != null) 
 			throw new UnsupportedOperationException("This instance of StatSouce already contains "
 					+ "complete data and should not be deserialized to!");
 		Scanner input = new Scanner(file);
+		
+		// Check Data Version
+		String dataVersion = input.nextLine();
+		try {
+			dataVersion = dataVersion.substring(dataVersion.indexOf("DataVersion: " + ("DataVersion: ".length()-1)));
+		} catch (StringIndexOutOfBoundsException sioobe) { // SIOOBE!!
+			dataVersion = "-1"; // Impossible data version, always will be converted
+		}
+		if (Long.parseLong(dataVersion) != serialVersionUID) {
+			input.close(); // Discard old scanner.
+			try {
+				updateFile(file); // Update file
+			} catch (Exception e) {
+				throw new IOException(e);
+			}
+			input = new Scanner(file); // Reinitialize scanner
+			// Method continues as normal with updated file
+		}
+		input.nextLine(); // Bypass DataVersion
 		this.sourceID = input.nextLine();
 		this.sourceType = SourceType.valueOf(input.nextLine().trim());
 		this.previousValue = Integer.parseInt(input.nextLine());
@@ -140,13 +163,6 @@ public class StatSource extends ArrayList<Guild> {
 			}
 		}
 		input.close();
-		
-		// Debug code
-//		System.out.println("Finished importing this source: " + sourceID + " of type " + sourceType);
-//		System.out.println(this.size() + " guilds.");
-//		for (Guild g : this) {
-//			System.out.println(g.getName());
-//		}
 	}
 	
 	/**
@@ -156,6 +172,7 @@ public class StatSource extends ArrayList<Guild> {
 	 */
 	public void serialize(File file) throws IOException {
 		FileWriter output = new FileWriter(file);
+		output.append("DataVersion: " + serialVersionUID + "\n");
 		output.append(sourceID + "\n");
 		output.append(sourceType + "\n");
 		output.append(previousValue + "\n");
@@ -164,5 +181,33 @@ public class StatSource extends ArrayList<Guild> {
 				output.append(g.getId());	
 			}
 		output.close();
+	}
+	
+	/**
+	 * Updates the provided file to the latest version of the save file format.<br>
+	 * This will only be updated if the SerialVersionUID changes.<p>
+	 * @param toUpdate - The file that needs to be updated.
+	 * @throws IOException If something goes wrong
+	 */
+	// TODO: MAKE SURE TO UPDATE THIS WHEN THE SERIAL VERSION CHANGES!!
+	public static void updateFile(File toUpdate) throws IOException {
+		System.out.println("Updating outdated file: " + toUpdate.getPath());
+		Scanner scan = new Scanner(toUpdate);
+		ArrayList<String> lines = new ArrayList<String>();
+		while (scan.hasNextLine())
+			lines.add(scan.nextLine());
+		scan.close();
+		FileWriter rewrite = new FileWriter(toUpdate);
+		
+		// Check for each version of the file
+		if (!lines.get(0).contains("DataVersion: ")) { // Version 0, before data versions implemented
+			rewrite.append("DataVersion: " + serialVersionUID + "\n");
+			rewrite.append(lines.get(0) + "\n");
+			rewrite.append(SourceType.values()[Integer.parseInt(lines.get(1)) - 1].toString() + "\n");
+			for (int i = 2; i < lines.size(); i++)
+				rewrite.append(lines.get(i) + "\n");
+			rewrite.close();
+		}
+		
 	}
 }

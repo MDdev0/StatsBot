@@ -64,8 +64,6 @@ public class StatPinger {
 	}
 	
 	/*
-	 * TODO: Command to remove a source from your server
-	 * TODO: Make the data collection from Mixerno a little more efficient
 	 * FIXME: ADD A CLEAN SHUTDOWN FOR GOD'S SAKE!
 	 */
 	
