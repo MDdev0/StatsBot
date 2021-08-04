@@ -85,7 +85,7 @@ public class AlertManager {
 			switch (source.getType()) {
 			
 			// YouTube subscriber alert
-			case StatSource.YOUTUBE_SUBSCRIBER:
+			case YTSub:
 				YTChannel channel = new YTChannel(source.getID());
 				if (source.getPrevValue() != channel.getSubCount()) { // Compare to last change
 					ytSubMessage(source, channel); // Send alert messages

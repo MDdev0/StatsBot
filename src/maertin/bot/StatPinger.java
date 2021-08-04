@@ -106,9 +106,7 @@ public class StatPinger {
 	public static void saveAll() {
 		for (StatSource source : sources) {
 			try {
-				File saveFile = new File( "saves/" + (
-								source.getType() == StatSource.YOUTUBE_SUBSCRIBER ? "YTSub" : "UNKNOWN" // source.getType() == 0 ? "YTSub" : source.getType() == 1 ? "ETC" : "ETC"
-							) + "_" + source.getID() + ".dat");
+				File saveFile = new File( "saves/" + source.getType() + "_" + source.getID() + ".dat");
 				source.serialize(saveFile);
 			} catch (IOException e) {
 				String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss;SSS").format(new Date());
@@ -123,9 +121,7 @@ public class StatPinger {
 	 * Removes an item from the saves if it needs to be deleted.
 	 */
 	public static void clearFile(StatSource source) {
-		File saveFile = new File( "saves/" + (
-			source.getType() == StatSource.YOUTUBE_SUBSCRIBER ? "YTSub" : "UNKNOWN" // source.getType() == 0 ? "YTSub" : source.getType() == 1 ? "ETC" : "ETC"
-		) + "_" + source.getID() + ".dat");
+		File saveFile = new File( "saves/" + source.getType() + "_" + source.getID() + ".dat");
 		String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss;SSS").format(new Date());
 		try {
 			if (saveFile.delete()) {

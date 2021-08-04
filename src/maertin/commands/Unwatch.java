@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import maertin.bot.StatPinger;
 import maertin.bot.StatSource;
+import maertin.bot.StatSource.SourceType;
 import maertin.dataFetchers.YTChannel;
 import maertin.dataFetchers.YTData;
 
@@ -44,7 +45,7 @@ public class Unwatch extends ListenerAdapter {
 					YTChannel channel = new YTChannel(YTData.getChannelID(args.get(1)));
 					
 					// Find source
-					int index = StatPinger.sources.indexOf(new StatSource(channel.getChannelID(), StatSource.YOUTUBE_SUBSCRIBER));
+					int index = StatPinger.sources.indexOf(new StatSource(channel.getChannelID(), SourceType.YTSub));
 					// If source isn't found
 					if (index == -1) {
 						msg.getChannel().sendMessage(WARNING_NOTFOUND.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);

@@ -17,13 +17,15 @@ import net.dv8tion.jda.api.entities.Guild;
  */
 @SuppressWarnings("serial")
 public class StatSource extends ArrayList<Guild> {
-
-	// These are all the supported sources. 
-	public static final int YOUTUBE_SUBSCRIBER = 1;
+	
+	public enum SourceType {
+		YTSub, // YouTube Subscribers
+		TweetFollow // Twitter Followers
+	}
 	
 	// Instance Variables
 	private String sourceID;
-	private int sourceType;
+	private SourceType sourceType;
 	
 	// -1 is the starting value, this will be changed the first time the source is checked.
 	private int previousValue = -1;
@@ -32,7 +34,7 @@ public class StatSource extends ArrayList<Guild> {
 	 * @param id - The ID of the source to follow (YouTube Channel ID, Twitter handle, etc.)
 	 * @param type - The type of source this represents. 
 	 */
-	public StatSource(String id, int type) {
+	public StatSource(String id, SourceType type) {
 		sourceID = id;
 		sourceType = type;
 	}
@@ -49,7 +51,7 @@ public class StatSource extends ArrayList<Guild> {
 	/**
 	 * @return The source's Type as an int.
 	 */
-	public int getType() {
+	public SourceType getType() {
 		return sourceType;
 	}
 	
@@ -119,12 +121,12 @@ public class StatSource extends ArrayList<Guild> {
 	 * @throws FileNotFoundException if the supplied file could not be found
 	 */
 	public void deserialize(File file) throws UnsupportedOperationException, FileNotFoundException {
-		if (this.sourceID != null && this.sourceType != 0) 
+		if (this.sourceID != null && this.sourceType != null) 
 			throw new UnsupportedOperationException("This instance of StatSouce already contains "
 					+ "complete data and should not be deserialized to!");
 		Scanner input = new Scanner(file);
 		this.sourceID = input.nextLine();
-		this.sourceType = Integer.parseInt(input.nextLine());
+		this.sourceType = SourceType.valueOf(input.nextLine().trim());
 		this.previousValue = Integer.parseInt(input.nextLine());
 		while (input.hasNextLine()) {
 			String guildID = input.nextLine();

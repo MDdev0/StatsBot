@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import maertin.bot.StatPinger;
 import maertin.bot.StatSource;
+import maertin.bot.StatSource.SourceType;
 import maertin.dataFetchers.YTChannel;
 import maertin.dataFetchers.YTData;
 
@@ -40,7 +41,7 @@ public class Watch extends ListenerAdapter {
 						&& args.get(2).equalsIgnoreCase("subscribers")) {
 					try {
 						YTChannel channel = new YTChannel(YTData.getChannelID(args.get(1)));
-						StatSource newSource = new StatSource(channel.getChannelID(), StatSource.YOUTUBE_SUBSCRIBER);
+						StatSource newSource = new StatSource(channel.getChannelID(), SourceType.YTSub);
 						
 						// Add the guild to the list of guilds if the source already exists
 						if (StatPinger.sources.contains(newSource)) {
