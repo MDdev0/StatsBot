@@ -24,7 +24,7 @@ public class TwitterUser {
 	 */
 	public TwitterUser(String handle) throws IOException {
 		this.userHandle = handle;
-		final String apiText = Jsoup.connect("https://mixerno.space/api/twitter/user/" + handle).timeout(StatPinger.QUERY_TIMEOUT).get().text();
+		final String apiText = Jsoup.connect("https://mixerno.space/api/twitter/user/" + handle).ignoreContentType(true).timeout(StatPinger.QUERY_TIMEOUT).get().text();
 		this.userName = apiText.substring(apiText.indexOf("\"fullname\": \"") + 13);
 		this.userName = this.userName.substring(0, this.userName.indexOf('"'));
 		this.userIcon = apiText.substring(apiText.indexOf("\"pfp\": \"") + 8);

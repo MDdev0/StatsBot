@@ -1,7 +1,6 @@
 package maertin.bot;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -24,7 +23,7 @@ public class StatSource extends ArrayList<Guild> {
 
 	public enum SourceType {
 		YTSub, // YouTube Subscribers
-		TweetFollow // TODO: Coming soon :)
+		TweetFollow // Twitter Followers
 	}
 	
 	// Instance Variables

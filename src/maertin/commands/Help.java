@@ -24,18 +24,19 @@ public class Help extends ListenerAdapter {
 				.addField("Syntax:", "`" + StatPinger.PREFIX + "watch` `<link to source>` `<source type>`", false)
 				.addField("Source links:",
 						"**YouTube Channel:** `youtube.com/channel/####` OR `youtube.com/user/####`,\n"
-						+ "Other Sources Coming Soon", false)
+								+ "**Twitter User:** `twitter.com/####`", false)
 				.addField("Source types:",
-						"`subscribers`, More Sources Coming Soon", false);
+						"`subscribers`, `followers`", false);
 				break;
 			case ("unwatch"):
 				embed.setTitle("`unwatch`")
 				.setDescription("Stops notifying your server about a particular source.")
 				.addField("Syntax:", "`" + StatPinger.PREFIX + "unwatch` `<link to source>` `<source type>`", false)
 				.addField("Source links:",
-						"**YouTube Channel:** `youtube.com/channel/####` OR `youtube.com/user/####`", false)
+						"**YouTube Channel:** `youtube.com/channel/####` OR `youtube.com/user/####`,\n"
+								+ "**Twitter User:** `twitter.com/####`", false)
 				.addField("Source types:",
-						"`subscribers`", false);
+						"`subscribers`, `followers`", false);
 				break;
 			case ("bug"):
 				embed.setTitle("`bug`")
