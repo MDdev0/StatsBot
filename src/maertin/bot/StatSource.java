@@ -131,11 +131,10 @@ public class StatSource extends ArrayList<Guild> {
 		
 		// Check Data Version
 		String dataVersion = input.nextLine();
-		try {
-			dataVersion = dataVersion.substring(dataVersion.indexOf("DataVersion: " + ("DataVersion: ".length()-1)));
-		} catch (StringIndexOutOfBoundsException sioobe) { // SIOOBE!!
-			dataVersion = "-1"; // Impossible data version, always will be converted
-		}
+		if (dataVersion.contains("DataVersion: "))
+			dataVersion = dataVersion.substring(dataVersion.indexOf("DataVersion: ") + ("DataVersion: ".length()));
+		else
+			dataVersion = "-1"; // Impossible data version, always will try to be converted
 		if (Long.parseLong(dataVersion) != serialVersionUID) {
 			input.close(); // Discard old scanner.
 			try {
@@ -145,8 +144,9 @@ public class StatSource extends ArrayList<Guild> {
 			}
 			input = new Scanner(file); // Reinitialize scanner
 			// Method continues as normal with updated file
+			input.nextLine(); // Bypass data version if this happens
 		}
-		input.nextLine(); // Bypass DataVersion
+		
 		this.sourceID = input.nextLine();
 		this.sourceType = SourceType.valueOf(input.nextLine().trim());
 		this.previousValue = Integer.parseInt(input.nextLine());
@@ -205,8 +205,7 @@ public class StatSource extends ArrayList<Guild> {
 			rewrite.append(SourceType.values()[Integer.parseInt(lines.get(1)) - 1].toString() + "\n");
 			for (int i = 2; i < lines.size(); i++)
 				rewrite.append(lines.get(i) + "\n");
-			rewrite.close();
 		}
-		
+		rewrite.close();
 	}
 }

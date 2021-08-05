@@ -196,7 +196,7 @@ public class AlertManager {
 		
 		// Build embed
 		EmbedBuilder alert = new EmbedBuilder()
-		.setTitle("YouTube Follower alert for: " + user.getUserName(),
+		.setTitle("Twitter Follower alert for: " + user.getUserName(),
 				"https://www.twitter.com/" + user.getUserHandle())
 		.setThumbnail(user.getUserIcon())
 		.addField("Old count", Integer.toString(source.getPrevValue()), true)
