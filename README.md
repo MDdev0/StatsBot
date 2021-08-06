@@ -30,7 +30,9 @@ Get pings in your discord servers whenever statistics about someone on the inter
 - More commands coming soon
 
 ## Supported Source Types
-- Subscribers<br>
-This can be YouTube subscribers (only option for now).<p>
+- YouTube
+	- Channel Subscribers
+- Twitter
+	- User's Followers
 
 - More types coming soon
