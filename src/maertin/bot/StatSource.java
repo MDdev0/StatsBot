@@ -198,14 +198,21 @@ public class StatSource extends ArrayList<Guild> {
 		scan.close();
 		FileWriter rewrite = new FileWriter(toUpdate);
 		
-		// Check for each version of the file
-		if (!lines.get(0).contains("DataVersion: ")) { // Version 0, before data versions implemented
-			rewrite.append("DataVersion: " + serialVersionUID + "\n");
-			rewrite.append(lines.get(0) + "\n");
-			rewrite.append(SourceType.values()[Integer.parseInt(lines.get(1)) - 1].toString() + "\n");
-			for (int i = 2; i < lines.size(); i++)
-				rewrite.append(lines.get(i) + "\n");
+		try {
+			// Check for each version of the file
+			if (!lines.get(0).contains("DataVersion: ")) { // Version 0, before data versions implemented
+				rewrite.append("DataVersion: " + serialVersionUID + "\n");
+				rewrite.append(lines.get(0) + "\n");
+				rewrite.append(SourceType.values()[Integer.parseInt(lines.get(1)) - 1].toString() + "\n");
+				for (int i = 2; i < lines.size(); i++)
+					rewrite.append(lines.get(i) + "\n");
+			}
+		} catch (Exception ex) {
+			for (String line : lines)
+				rewrite.append(line);
+			throw ex;
+		} finally {
+			rewrite.close();
 		}
-		rewrite.close();
 	}
 }
