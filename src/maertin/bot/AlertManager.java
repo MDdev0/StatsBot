@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import maertin.dataFetchers.TwitterUser;
 import maertin.dataFetchers.YTChannel;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -15,7 +16,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class AlertManager {
-	// TODO instance variables
+	
 	static Timer timer = new Timer();
 	
 	static TimerTask refreshAll = new TimerTask() {
@@ -85,11 +86,39 @@ public class AlertManager {
 			switch (source.getType()) {
 			
 			// YouTube subscriber alert
-			case StatSource.YOUTUBE_SUBSCRIBER:
+			case YTSub:
 				YTChannel channel = new YTChannel(source.getID());
 				if (source.getPrevValue() != channel.getSubCount()) { // Compare to last change
 					ytSubMessage(source, channel); // Send alert messages
 					source.updatePrevValue(channel.getSubCount());
+				}
+				break;
+			
+			// Twitter follower alerts
+			// Will only be sent when one of the top three digits changes
+			case TweetFollow:
+				TwitterUser user = new TwitterUser(source.getID());
+				// Truncate the current number to first three digits
+				int truncCurr = user.getFollowCount();
+				int zeros = 0;
+				while (truncCurr > 1000) {
+					truncCurr /= 10;
+					zeros++;
+				}
+				truncCurr *= (int) Math.pow(10, zeros);
+				// Truncate previous number to first three digits
+				int truncPrev = source.getPrevValue();
+				zeros = 0;
+				while (truncPrev > 1000) {
+					truncPrev /= 10;
+					zeros++;
+				}
+				truncPrev *= (int) Math.pow(10, zeros);
+				
+				// Compare!
+				if (truncCurr != truncPrev) {
+					tweetFollowMessage(source, user);
+					source.updatePrevValue(user.getFollowCount());
 				}
 				break;
 			}
@@ -108,28 +137,16 @@ public class AlertManager {
 	}
 	
 	/**
-	 * Sends messages for YouTube Subscriber alerts.
-	 * This was done to clean up the refreshSource method.
-	 * @param source  - Source object to alert for
-	 * @param current - Current subscriber count
+	 * Sends pre-built alert embeds to all of a sources guilds.<br>
+	 * This process is the same regardless of the type of source.
+	 * @param alert - Pre-Built Embed to send out.
+	 * @param source - Source that contains the guilds that must be alerted
 	 */
-	private static void ytSubMessage(StatSource source, YTChannel channel) {
-		// Don't send a message if this has never been tracked before
-		if (source.getPrevValue() == -1) return;
-		
-		// Build embed
-		EmbedBuilder alert = new EmbedBuilder();
-		alert.setTitle("YouTube Subscriber alert for: " + channel.getChannelName(),
-				"https://www.youtube.com/channel/" + source.getID());
-		alert.setThumbnail(channel.getChannelIcon());
-		alert.addField("Old count", Integer.toString(source.getPrevValue()), true);
-		alert.addField("New count", Integer.toString(channel.getSubCount()), true);
-		alert.setColor(0xff0000);
-		
+	private static void sendAlertMessage(EmbedBuilder alert, StatSource source) {
 		// Send message to all subscribed guilds
 		for (Guild g : source) {
-			alert.setFooter((source.size() == 1 ? "You were the only server to get this alert!" : 
-				source.size()-1 + " other servers got this alert."), g.getIconUrl());
+			alert.setFooter((source.size() == 1 ? "You were the only server to get this alert!"
+					: source.size() - 1 + " other servers got this alert."), g.getIconUrl());
 			try {
 				g.getTextChannelsByName("stat-pings", true).get(0).sendTyping().queue();
 				g.getTextChannelsByName("stat-pings", true).get(0).sendMessage(alert.build()).queue();
@@ -143,6 +160,50 @@ public class AlertManager {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Builds messages for YouTube Subscriber alerts.
+	 * This was done to clean up the refreshSource method.
+	 * @param source  - Source object to alert for
+	 * @param channel - Channel object that contains information about the alert
+	 */
+	private static void ytSubMessage(StatSource source, YTChannel channel) {
+		// Don't send a message if this has never been tracked before
+		if (source.getPrevValue() == -1) return;
+		
+		// Build embed
+		EmbedBuilder alert = new EmbedBuilder()
+		.setTitle("YouTube Subscriber alert for: " + channel.getChannelName(),
+				"https://www.youtube.com/channel/" + channel.getChannelID())
+		.setThumbnail(channel.getChannelIcon())
+		.addField("Old count", Integer.toString(source.getPrevValue()), true)
+		.addField("New count", Integer.toString(channel.getSubCount()), true)
+		.setColor(0xff0000);
+		
+		sendAlertMessage(alert, source);
+		alert.clear();
+	}
+	
+	/**
+	 * Builds alert messages for Twitter Follower alerts.
+	 * @param source - Source object to alert for
+	 * @param user - User object that contains information about the alert
+	 */
+	private static void tweetFollowMessage(StatSource source, TwitterUser user) {
+		// Don't send message if source is brand new
+		if (source.getPrevValue() == -1) return;
+		
+		// Build embed
+		EmbedBuilder alert = new EmbedBuilder()
+		.setTitle("Twitter Follower alert for: " + user.getUserName(),
+				"https://www.twitter.com/" + user.getUserHandle())
+		.setThumbnail(user.getUserIcon())
+		.addField("Old count", Integer.toString(source.getPrevValue()), true)
+		.addField("New count", Integer.toString(user.getFollowCount()), true)
+		.setColor(0x1da1f2);
+		
+		sendAlertMessage(alert, source);
 		alert.clear();
 	}
 }
