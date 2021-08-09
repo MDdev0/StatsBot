@@ -110,7 +110,7 @@ public class Unwatch extends ListenerAdapter {
 						StatPinger.clearFile(source);
 						
 						// Success Message
-						msg.getChannel().sendMessage(SUCCESS.addField(user.getUserName(), "**Tracking:** Subscriber Count", false)
+						msg.getChannel().sendMessage(SUCCESS.addField(user.getUserName(), "**Tracking:** Follower Count", false)
 								.setThumbnail(user.getUserIcon()).build()).queue();
 						} catch (Exception e) {
 							// XXX Maybe be a little more descriptive? Just an option.
