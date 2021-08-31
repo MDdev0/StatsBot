@@ -42,7 +42,7 @@ public class AlertManager {
 						System.out.println("[" + timestamp + "] Too many timeouts! Stopping the loop...");
 						StatPinger.jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, 
 								Activity.listening("way too many web timeouts! Stopped on source "
-						+ s + " of " + StatPinger.sources.size()));
+						+ (s+1) + " of " + StatPinger.sources.size()));
 						return;
 					}
 				}
@@ -83,6 +83,10 @@ public class AlertManager {
 	 */
 	private static StatSource refreshSource(StatSource source) throws SocketTimeoutException {
 		try {
+			// Increment the cycle counter
+			// Used for spam prevention
+			source.incrementCycles();
+			
 			switch (source.getType()) {
 			
 			// YouTube subscriber alert
@@ -117,8 +121,26 @@ public class AlertManager {
 				
 				// Compare!
 				if (truncCurr != truncPrev) {
-					tweetFollowMessage(source, user);
+					if (source.getCycles() > 3*15) { // intervals per min * minutes between allowed announcements
+						tweetFollowMessage(source, user);
+						source.updateAnnouncedVal();
+					}
 					source.updatePrevValue(user.getFollowCount());
+				}
+				
+				// Handle delayed announcement if current value differs from previous announcement
+				if (source.getCycles() > 3*15) {
+					truncPrev = source.getPrevAnnounced();
+					zeros = 0;
+					while (truncPrev > 1000) {
+						truncPrev /= 10;
+						zeros++;
+					}
+					truncPrev *= (int) Math.pow(10, zeros);
+					if (truncCurr != truncPrev) {
+						tweetFollowMessage(source, user);
+						source.updateAnnouncedVal();
+					}
 				}
 				break;
 			}

@@ -33,6 +33,24 @@ public class StatSource extends ArrayList<Guild> {
 	// -1 is the starting value, this will be changed the first time the source is checked.
 	private int previousValue = -1;
 	
+	/*
+	 * SPAM LIMITATION
+	 * The following variables are only needed for sources that have spam limitations placed on them.
+	 * They need not be touched otherwise.
+	 * 
+	 * Currently Using Spam Protection:
+	 * - Twitter Followers
+	 */
+	
+	// The number of cycles since the value of this source has changed. Not serialized.
+	// This was done in case certain sources are changing rapidly to prevent spam in guilds that are listening.
+	private transient int cyclesSinceChanged = -1;
+	
+	// This value should be updated every time a source is announced to have changed.
+	// If spam limitation kicks in, this shouldn't change until that is settled, 
+	// at which point it can help determine if another announcement is needed.
+	private transient int previousAnnouncedVal = -1;
+	
 	/**
 	 * @param id - The ID of the source to follow (YouTube Channel ID, Twitter handle, etc.)
 	 * @param type - The type of source this represents. 
@@ -69,10 +87,46 @@ public class StatSource extends ArrayList<Guild> {
 	/**
 	 * Use this when the current value has changed substantially enough from the previous value.<p>
 	 * After an alert is sent, update the old value here.
+	 * Resets the cyclesSinceChanged counter.
 	 * @param newValue - The int to set as the new previous value to check for changes.
 	 */
 	public void updatePrevValue(int newValue) {
 		previousValue = newValue;
+		cyclesSinceChanged = 0;
+	}
+	
+	/*
+	 * ANTI - SPAM FEATURES
+	 */
+	
+	/**
+	 * @return The number of cycles since this source was updated.
+	 */
+	public int getCycles() {
+		return cyclesSinceChanged;
+	}
+	
+	/**
+	 * Increments the number of cycles since this source was updated.
+	 */
+	public void incrementCycles() {
+		cyclesSinceChanged++;
+	}
+	
+	/**
+	 * This method is not needed if a particular type of source has no spam limitation.
+	 * @return The previously announced value of this source.
+	 */
+	public int getPrevAnnounced() {
+		return previousAnnouncedVal;
+	}
+	
+	/**
+	 * This method is not needed if a particular type of source has no spam limitation.
+	 * Updated the value that was recently announced to match previousValue.
+	 */
+	public void updateAnnouncedVal() {
+		previousAnnouncedVal = previousValue;
 	}
 	
 	/**
