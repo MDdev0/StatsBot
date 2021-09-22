@@ -11,6 +11,11 @@ import org.jsoup.Jsoup;
  * @author maertin - Discord: MDguy1547#8643
  */
 public class TwitterUser {
+	private final String URL = "https://mixerno.space/api/twitter-user-counter/user/";
+	private final String NAME_LOCATION = "\"value\":\"name\",\"count\":\"";
+	private final String ICON_LOCATION = "\"value\":\"pfp\",\"count\":\"";
+	private final String FOLLOWER_LOCATION = "\"value\":\"followers\",\"count\":";
+	
 	private String userHandle;
 	private String userName;
 	private String userIcon;
@@ -24,13 +29,13 @@ public class TwitterUser {
 	 */
 	public TwitterUser(String handle) throws IOException {
 		this.userHandle = handle;
-		final String apiText = Jsoup.connect("https://mixerno.space/api/twitter/user/" + handle).ignoreContentType(true).timeout(StatPinger.QUERY_TIMEOUT).get().text();
-		this.userName = apiText.substring(apiText.indexOf("\"fullname\": \"") + 13);
+		final String apiText = Jsoup.connect(URL + handle).ignoreContentType(true).timeout(StatPinger.QUERY_TIMEOUT).get().text().replaceAll("\\s", "");
+		this.userName = apiText.substring(apiText.indexOf(NAME_LOCATION) + NAME_LOCATION.length());
 		this.userName = this.userName.substring(0, this.userName.indexOf('"'));
-		this.userIcon = apiText.substring(apiText.indexOf("\"pfp\": \"") + 8);
+		this.userIcon = apiText.substring(apiText.indexOf(ICON_LOCATION) + ICON_LOCATION.length());
 		this.userIcon = this.userIcon.substring(0, this.userIcon.indexOf('"'));
-		String followCountStr = apiText.substring(apiText.indexOf("\"followers\": ") + 13);
-		this.followCount = Integer.parseInt(followCountStr.substring(0, followCountStr.indexOf(",")));
+		String followCountStr = apiText.substring(apiText.indexOf(FOLLOWER_LOCATION) + FOLLOWER_LOCATION.length());
+		this.followCount = Integer.parseInt(followCountStr.substring(0, followCountStr.indexOf("}")));
 	}
 	
 	/**
