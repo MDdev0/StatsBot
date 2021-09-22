@@ -13,9 +13,9 @@ import org.jsoup.Jsoup;
  */
 public class YTChannel {
 	private final String URL = "https://mixerno.space/api/youtube-channel-counter/user/";
-	private final String NAME_LOCATION = "\"value\": \"name\", \"count\": \"";
-	private final String ICON_LOCATION = "\"value\": \"pfp\", \"count\": \"";
-	private final String SUBSCRIBER_LOCATION = "\"value\": \"apisubscribers\", \"count\": \"";
+	private final String NAME_LOCATION = "\"value\":\"name\",\"count\":\"";
+	private final String ICON_LOCATION = "\"value\":\"pfp\",\"count\":\"";
+	private final String SUBSCRIBER_LOCATION = "\"value\":\"apisubscribers\",\"count\":\"";
 	
 	private String channelID;
 	private String channelName;
@@ -33,7 +33,7 @@ public class YTChannel {
 	public YTChannel(String channelID) throws IOException {
 		this.channelID = channelID;
 		// CONNECTION TIMES OUT AFTER SET TIME! See AlertManager for handling of timeouts. 
-		final String apiText = Jsoup.connect(URL + channelID).timeout(StatPinger.QUERY_TIMEOUT).get().text();
+		final String apiText = Jsoup.connect(URL + channelID).timeout(StatPinger.QUERY_TIMEOUT).get().text().replaceAll("\\s", "");
 		this.channelName = apiText.substring(apiText.indexOf(NAME_LOCATION) + NAME_LOCATION.length());
 		this.channelName = this.channelName.substring(0, this.channelName.indexOf('"'));
 		this.channelIcon = apiText.substring(apiText.indexOf(ICON_LOCATION) + ICON_LOCATION.length());

@@ -20,7 +20,7 @@ public class ScrapeTest {
 			try {
 				Document doc = Jsoup.connect(URL2).timeout(5000).get();
 				
-				System.out.println(doc.text());
+				System.out.println(doc.text().replaceAll("\\s", ""));
 				
 //				String digits = doc.getElementById("mainodo").text().replaceAll(",", "");
 //				

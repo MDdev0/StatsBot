@@ -1,7 +1,7 @@
 API Returns from Mixerno
 
 YT Channel
-{ "t": ####, "counts": [ { "value": "subscribers", "count": #### }, { "value": "goal", "count": #### }, { "value": "apisubscribers", "count": "##00" }, { "value": "views", "count": #### }, { "value": "apiviews", "count": "####" }, { "value": "videos", "count": "####" } ], "user": [ { "value": "name", "count": "####" }, { "value": "pfp", "count": "####" }, { "value": "banner", "count": "####" } ] }
+{"t":####,"counts":[{"value":"subscribers","count":####},{"value":"goal","count":####},{"value":"apisubscribers","count":"##00"},{"value":"views","count":####},{"value":"apiviews","count":"####"},{"value":"videos","count":"####"}],"user":[{"value":"name","count":"####"},{"value":"pfp","count":"####"},{"value":"banner","count":"####"}]}
 
 Twitter User
-{ "t": ####, "counts": [ { "value": "followers", "count": #### }, { "value": "goal", "count": #### }, { "value": "following", "count": #### }, { "value": "likes", "count": #### }, { "value": "lists", "count": #### }, { "value": "media", "count": #### }, { "value": "tweets", "count": #### } ], "user": [ { "value": "name", "count": "####" }, { "value": "pfp", "count": "####" }, { "value": "banner", "count": "####" } ] }
+{"t":####,"counts":[{"value":"followers","count":####},{"value":"goal","count":####},{"value":"following","count":####},{"value":"likes","count":####},{"value":"lists","count":####},{"value":"media","count":####},{"value":"tweets","count":####}],"user":[{"value":"name","count":"####"},{"value":"pfp","count":"####"},{"value":"banner","count":"####"}]}

@@ -32,7 +32,7 @@ public class YTData {
 	 * @return the Subscriber count as an int
 	 * @throws IOException in case of any error
 	 * 
-	 * @deprecated Connects to the web for every request instead of storing them locally.
+	 * @deprecated Connects to the web for every request instead of storing them locally.<br><b>NOT UPDATED TO MIXERNO V6!</b>
 	 * @see YTChannel
 	 */
 	public static int getSubCount(String channelID) throws IOException {
@@ -51,7 +51,7 @@ public class YTData {
 	 * @return the channel's name
 	 * @throws IOException in case of any error
 	 * 
-	 * @deprecated Connects to the web for every request instead of storing them locally.
+	 * @deprecated Connects to the web for every request instead of storing them locally.<br><b>NOT UPDATED TO MIXERNO V6!</b>
 	 * @see YTChannel
 	 */
 	public static String getChannelName(String channelID) throws IOException {
@@ -70,7 +70,7 @@ public class YTData {
 	 * @return the channel's icon URL
 	 * @throws IOException in case of any error
 	 * 
-	 * @deprecated Connects to the web for every request instead of storing them locally.
+	 * @deprecated Connects to the web for every request instead of storing them locally.<br><b>NOT UPDATED TO MIXERNO V6!</b>
 	 * @see YTChannel
 	 */
 	public static String getChannelIcon(String channelID) throws IOException {
