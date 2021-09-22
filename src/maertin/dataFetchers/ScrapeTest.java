@@ -12,17 +12,20 @@ import org.jsoup.nodes.Document;
 public class ScrapeTest {
 	
 	final static String URL = "https://beta.mixerno.space/youtube-subscriber-counter/UCDpXkkO-zrCJBByrdERqKMw";
+	final static String URL2 = "https://mixerno.space/api/twitter-user-counter/user/MrBeast_Stats";
 	
 	static TimerTask getData = new TimerTask() {
 		@Override
 		public void run() {
 			try {
-				Document doc = Jsoup.connect(URL).timeout(5000).get();
+				Document doc = Jsoup.connect(URL2).timeout(5000).get();
 				
-				String digits = doc.getElementById("mainodo").text().replaceAll(",", "");
+				System.out.println(doc.text());
 				
-				long count = Integer.parseInt(digits);
-				System.out.println("Subscribers: " + count);
+//				String digits = doc.getElementById("mainodo").text().replaceAll(",", "");
+//				
+//				long count = Integer.parseInt(digits);
+//				System.out.println("Subscribers: " + count);
 				
 			} catch (SocketTimeoutException e) {
 				System.out.println("Timed out.");
