@@ -117,6 +117,8 @@ public class AlertManager {
 					truncPrev /= 10;
 					zeros++;
 				}
+				// Append appropriate number of 0s
+				truncPrev *= (int) Math.pow(10, zeros);
 				
 				// Truncate previous announced number to first three digits 
 				int truncPrevAnnounced = source.getPrevAnnounced();
