@@ -42,13 +42,8 @@ public class StatSource extends ArrayList<Guild> {
 	 * - Twitter Followers
 	 */
 	
-	// The number of cycles since the value of this source has changed. Not serialized.
-	// This was done in case certain sources are changing rapidly to prevent spam in guilds that are listening.
-	private transient int cyclesSinceChanged = -1;
-	
 	// This value should be updated every time a source is announced to have changed.
-	// If spam limitation kicks in, this shouldn't change until that is settled, 
-	// at which point it can help determine if another announcement is needed.
+	// If a source only changes by one significant figure downward, it will be SILENTLY updated.
 	private transient int previousAnnouncedVal = -1;
 	
 	/**
@@ -92,25 +87,6 @@ public class StatSource extends ArrayList<Guild> {
 	 */
 	public void updatePrevValue(int newValue) {
 		previousValue = newValue;
-		cyclesSinceChanged = 0;
-	}
-	
-	/*
-	 * ANTI - SPAM FEATURES
-	 */
-	
-	/**
-	 * @return The number of cycles since this source was updated.
-	 */
-	public int getCycles() {
-		return cyclesSinceChanged;
-	}
-	
-	/**
-	 * Increments the number of cycles since this source was updated.
-	 */
-	public void incrementCycles() {
-		cyclesSinceChanged++;
 	}
 	
 	/**

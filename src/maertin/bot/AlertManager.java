@@ -83,10 +83,6 @@ public class AlertManager {
 	 */
 	private static StatSource refreshSource(StatSource source) throws SocketTimeoutException {
 		try {
-			// Increment the cycle counter
-			// Used for spam prevention
-			source.incrementCycles();
-			
 			switch (source.getType()) {
 			
 			// YouTube subscriber alert
@@ -102,6 +98,7 @@ public class AlertManager {
 			// Will only be sent when one of the top three digits changes
 			case TweetFollow:
 				TwitterUser user = new TwitterUser(source.getID());
+				
 				// Truncate the current number to first three digits
 				int truncCurr = user.getFollowCount();
 				int zeros = 0;
@@ -109,38 +106,44 @@ public class AlertManager {
 					truncCurr /= 10;
 					zeros++;
 				}
+				// Append appropriate number of 0s
 				truncCurr *= (int) Math.pow(10, zeros);
+				
 				// Truncate previous number to first three digits
 				int truncPrev = source.getPrevValue();
 				zeros = 0;
+				// Get first 3 digits
 				while (truncPrev > 1000) {
 					truncPrev /= 10;
 					zeros++;
 				}
-				truncPrev *= (int) Math.pow(10, zeros);
+				
+				// Truncate previous announced number to first three digits 
+				int truncPrevAnnounced = source.getPrevAnnounced();
+				zeros = 0;
+				// Get first 3 digits
+				while (truncPrevAnnounced > 1000) {
+					truncPrevAnnounced /= 10;
+					zeros++;
+				}
+				// Append AND SAVE appropriate number of 0s
+				int announcedZeros = zeros;
+				truncPrevAnnounced *= (int) Math.pow(10, announcedZeros);
 				
 				// Compare!
 				if (truncCurr != truncPrev) {
-					if (source.getCycles() > 3*15) { // intervals per min * minutes between allowed announcements
+					/*
+					 * Value is only announced if one of the following conditions are met:
+					 * - truncCurr > truncPrevAnnounced
+					 * - truncCurr < truncPrevAnnounced - (1 of its least significant digit)
+					 * This effectively stops alerts when bouncing between two values with only
+					 * 	a one significant digit difference
+					 */
+					if (truncCurr > truncPrevAnnounced || truncCurr < (truncPrevAnnounced - Math.pow(10, zeros))) {
 						tweetFollowMessage(source, user);
 						source.updateAnnouncedVal();
 					}
 					source.updatePrevValue(user.getFollowCount());
-				}
-				
-				// Handle delayed announcement if current value differs from previous announcement
-				if (source.getCycles() > 3*15) {
-					truncPrev = source.getPrevAnnounced();
-					zeros = 0;
-					while (truncPrev > 1000) {
-						truncPrev /= 10;
-						zeros++;
-					}
-					truncPrev *= (int) Math.pow(10, zeros);
-					if (truncCurr != truncPrev) {
-						tweetFollowMessage(source, user);
-						source.updateAnnouncedVal();
-					}
 				}
 				break;
 			}
