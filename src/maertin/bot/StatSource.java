@@ -207,7 +207,7 @@ public class StatSource extends ArrayList<Guild> {
 		output.append(previousValue + "\n");
 		if (!this.isEmpty())
 			for (Guild g : this) {
-				output.append(g.getId());	
+				output.append(g.getId() + "\n");	
 			}
 		output.close();
 	}
