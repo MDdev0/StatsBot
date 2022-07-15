@@ -15,7 +15,7 @@ public class YTChannel {
 	private final String URL = "https://mixerno.space/api/youtube-channel-counter/user/";
 	private final String NAME_LOCATION = "\"value\":\"name\",\"count\":\"";
 	private final String ICON_LOCATION = "\"value\":\"pfp\",\"count\":\"";
-	private final String SUBSCRIBER_LOCATION = "\"value\":\"apisubscribers\",\"count\":\"";
+	private final String SUBSCRIBER_LOCATION = "\"value\":\"apisubscribers\",\"count\":";
 	
 	private String channelID;
 	private String channelName;
@@ -39,7 +39,7 @@ public class YTChannel {
 		this.channelIcon = apiText.substring(apiText.indexOf(ICON_LOCATION) + ICON_LOCATION.length());
 		this.channelIcon = this.channelIcon.substring(0, this.channelIcon.indexOf('"'));
 		String subCountStr = apiText.substring(apiText.indexOf(SUBSCRIBER_LOCATION) + SUBSCRIBER_LOCATION.length());
-		this.subCount = Integer.parseInt(subCountStr.substring(0, subCountStr.indexOf('"')));
+		this.subCount = Integer.parseInt(subCountStr.substring(0, subCountStr.indexOf('}')));
 	}
 	
 	/**
