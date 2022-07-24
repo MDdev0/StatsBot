@@ -101,9 +101,7 @@ public class StatSource extends ArrayList<Guild> {
 	 * This method is not needed if a particular type of source has no spam limitation.
 	 * Updated the value that was recently announced to match previousValue.
 	 */
-	public void updateAnnouncedVal() {
-		previousAnnouncedVal = previousValue;
-	}
+	public void updateAnnouncedVal( int newValue) { previousAnnouncedVal = newValue; }
 	
 	/**
 	 * Determines if two instances of StatSource are equal <b>without looking at Guilds listening to the source.</b><p>

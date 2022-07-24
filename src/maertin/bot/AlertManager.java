@@ -143,7 +143,7 @@ public class AlertManager {
 					 */
 					if (truncCurr > truncPrevAnnounced || truncCurr < (truncPrevAnnounced - Math.pow(10, zeros))) {
 						tweetFollowMessage(source, user);
-						source.updateAnnouncedVal();
+						source.updateAnnouncedVal(user.getFollowCount());
 					}
 					source.updatePrevValue(user.getFollowCount());
 				}
