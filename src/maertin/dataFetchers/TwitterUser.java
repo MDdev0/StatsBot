@@ -11,7 +11,7 @@ import org.jsoup.Jsoup;
  * @author maertin - Discord: MDguy1547#8643
  */
 public class TwitterUser {
-	private final String URL = "https://mixerno.space/api/twitter-user-counter/user/";
+	private final String URL = "https://mixerno.space/twitter-user-counter/user/";
 	private final String NAME_LOCATION = "\"value\":\"name\",\"count\":\"";
 	private final String ICON_LOCATION = "\"value\":\"pfp\",\"count\":\"";
 	private final String FOLLOWER_LOCATION = "\"value\":\"followers\",\"count\":";
