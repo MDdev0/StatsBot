@@ -14,11 +14,14 @@ import net.dv8tion.jda.api.entities.Guild;
  * Container for one statistic source's info <b>and</b> the Guilds listening to it.
  * @author maertin
  */
+@SuppressWarnings("GrazieInspection")
 public class StatSource extends ArrayList<Guild> {
-	
+
+
 	/**
 	 * Used with DataVersion for serialize and deserialize
 	 */
+	@SuppressWarnings("MissingSerialAnnotation")
 	private static final long serialVersionUID = 1L;
 
 	public enum SourceType {
@@ -123,14 +126,14 @@ public class StatSource extends ArrayList<Guild> {
 	public boolean equalsIgnoreGuilds(Object o) {
 		if (this == o) return true;
 		if (o == null) return false;
-		if (this.getClass() != o.getClass()) return false;
+		if (getClass() != o.getClass()) return false;
 		StatSource s = (StatSource) o;
-		return (this.getType() == s.getType() && this.getID().equals(s.getID()));
+		return (getType() == s.getType() && getID().equals(s.getID()));
 	}
 	
 	@Override
 	//SCUFFED EQUALS METHOD
-	/**
+	/*
 	 * Yes, I know this is probably a scuffed way of doing things.
 	 * I do it so I can use ArrayList.contains on the main list.
 	 */
@@ -152,8 +155,8 @@ public class StatSource extends ArrayList<Guild> {
 	 * @throws IOException if the supplied file could not be found or if there was an error updating the file
 	 */
 	public void deserialize(File file) throws UnsupportedOperationException, IOException {
-		if (this.sourceID != null && this.sourceType != null) 
-			throw new UnsupportedOperationException("This instance of StatSouce already contains "
+		if (sourceID != null && sourceType != null)
+			throw new UnsupportedOperationException("This instance of StatSource already contains "
 					+ "complete data and should not be deserialized to!");
 		Scanner input = new Scanner(file);
 		
@@ -175,13 +178,13 @@ public class StatSource extends ArrayList<Guild> {
 			input.nextLine(); // Bypass data version if this happens
 		}
 		
-		this.sourceID = input.nextLine();
-		this.sourceType = SourceType.valueOf(input.nextLine().trim());
-		this.previousValue = Integer.parseInt(input.nextLine());
+		sourceID = input.nextLine();
+		sourceType = SourceType.valueOf(input.nextLine().trim());
+		previousValue = Integer.parseInt(input.nextLine());
 		while (input.hasNextLine()) {
 			String guildID = input.nextLine();
 			try {
-				this.add(StatPinger.jda.getGuildById(guildID));
+				add(StatPinger.jda.getGuildById(guildID));
 			} catch (NumberFormatException nfe) {
 				String timestamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss;SSS").format(new Date());
 				System.out.println("[" + timestamp + "] Error importing a guild to this source: " + sourceID + " of type " + sourceType);
@@ -203,7 +206,7 @@ public class StatSource extends ArrayList<Guild> {
 		output.append(sourceID + "\n");
 		output.append(sourceType + "\n");
 		output.append(previousValue + "\n");
-		if (!this.isEmpty())
+		if (!isEmpty())
 			for (Guild g : this) {
 				output.append(g.getId() + "\n");	
 			}
@@ -220,7 +223,7 @@ public class StatSource extends ArrayList<Guild> {
 	public static void updateFile(File toUpdate) throws IOException {
 		System.out.println("Updating outdated file: " + toUpdate.getPath());
 		Scanner scan = new Scanner(toUpdate);
-		ArrayList<String> lines = new ArrayList<String>();
+		ArrayList<String> lines = new ArrayList<>();
 		while (scan.hasNextLine())
 			lines.add(scan.nextLine());
 		scan.close();

@@ -12,7 +12,7 @@ import org.jsoup.Jsoup;
  * @author maertin - Discord: MDguy1547#8643
  */
 public class YTData {
-	
+
 	/**
 	 * Uses a provided YouTube Channel URL to pull the Channel ID from the channel's HTML code.
 	 * @param url - Channel URL to get Channel ID from.
@@ -21,6 +21,7 @@ public class YTData {
 	 */
 	public static String getChannelID(String url) throws IOException {
 		// CONNECTION TIMES OUT AFTER SET TIME! See AlertManager for handling of timeouts. 
+		//noinspection SpellCheckingInspection
 		return Jsoup.connect(url).timeout(StatPinger.QUERY_TIMEOUT).get().getElementsByAttributeValue("itemprop", "channelId").attr("content");
 	}
 	
@@ -32,9 +33,10 @@ public class YTData {
 	 * @return the Subscriber count as an int
 	 * @throws IOException in case of any error
 	 * 
-	 * @deprecated Connects to the web for every request instead of storing them locally.<br><b>NOT UPDATED TO MIXERNO V6!</b>
+	 * @deprecated Connects to the web for every request instead of storing them locally.<br><b>Mixerno is no longer operating/functioning reliably.</b>
 	 * @see YTChannel
 	 */
+	@Deprecated(forRemoval = true)
 	public static int getSubCount(String channelID) throws IOException {
 		String url = "https://mixerno.space/api/yt/channel/" + channelID;
 		String fullText = Jsoup.connect(url).get().text();
@@ -51,9 +53,10 @@ public class YTData {
 	 * @return the channel's name
 	 * @throws IOException in case of any error
 	 * 
-	 * @deprecated Connects to the web for every request instead of storing them locally.<br><b>NOT UPDATED TO MIXERNO V6!</b>
+	 * @deprecated Connects to the web for every request instead of storing them locally.<br><b>Mixerno is no longer operating/functioning reliably.</b>
 	 * @see YTChannel
 	 */
+	@Deprecated(forRemoval = true)
 	public static String getChannelName(String channelID) throws IOException {
 		String url = "https://mixerno.space/api/yt/channel/" + channelID;
 		String fullText = Jsoup.connect(url).get().text();
@@ -70,9 +73,10 @@ public class YTData {
 	 * @return the channel's icon URL
 	 * @throws IOException in case of any error
 	 * 
-	 * @deprecated Connects to the web for every request instead of storing them locally.<br><b>NOT UPDATED TO MIXERNO V6!</b>
+	 * @deprecated Connects to the web for every request instead of storing them locally.<br><b>Mixerno is no longer operating/functioning reliably.</b>
 	 * @see YTChannel
 	 */
+	@Deprecated(forRemoval = true)
 	public static String getChannelIcon(String channelID) throws IOException {
 		String url = "https://mixerno.space/api/yt/channel/" + channelID;
 		String fullText = Jsoup.connect(url).get().text();

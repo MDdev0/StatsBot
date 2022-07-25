@@ -20,7 +20,7 @@ public class StatPinger {
 	public static JDA jda;
 	// Config values
 	private static String DISCORD_API_KEY;
-	private static String YOUTUBE_API_KEY;
+	public static String YOUTUBE_API_KEY;
 	public static String PREFIX;
 	public static long REFRESH_RATE;
 	public static int QUERY_TIMEOUT;

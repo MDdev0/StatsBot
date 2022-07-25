@@ -23,9 +23,9 @@ public class Unwatch extends ListenerAdapter {
 		final EmbedBuilder SUCCESS = new EmbedBuilder().setTitle("✅ Success!").setColor(0x2dd52d)
 				.setDescription("Your guild will no longer be notified about the following source. Use `" + StatPinger.PREFIX + "watch` to add it again later.");
 		final EmbedBuilder ERROR_UNKNOWN = new EmbedBuilder().setTitle("⛔ Error").setColor(0xe0143e).setDescription(
-				"An unknown error occured while trying to remove this source. Maybe try another one or try again later?")
+				"An unknown error occurred while trying to remove this source. Maybe try another one or try again later?")
 				.setFooter("This message will be deleted in 60 seconds.");
-		final EmbedBuilder WARNING_NOTFOUND = new EmbedBuilder().setTitle("⚠ Source Not Found").setColor(0xefef32).setDescription(
+		final EmbedBuilder WARNING_NOT_FOUND = new EmbedBuilder().setTitle("⚠ Source Not Found").setColor(0xefef32).setDescription(
 				"Unable to remove the source because this server is not listening to it!").setFooter("This message will be deleted in 60 seconds.");
 		final EmbedBuilder WARNING_SYNTAX = new EmbedBuilder().setTitle("⚠ Improper Syntax").setColor(0xefef32).setFooter("This message will be deleted in 60 seconds.")
 				.addField("YouTube Subscriber Count:", "`" + StatPinger.PREFIX + "unwatch` `youtube.com/channel/#######` `subscribers`", false)
@@ -50,14 +50,14 @@ public class Unwatch extends ListenerAdapter {
 						int index = StatPinger.sources.indexOf(new StatSource(channel.getChannelID(), SourceType.YTSub));
 						// If source isn't found
 						if (index == -1) {
-							msg.getChannel().sendMessage(WARNING_NOTFOUND.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
+							msg.getChannel().sendMessage(WARNING_NOT_FOUND.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
 							return; // ENDS HERE IF NOT FOUND
 						}
 						
 						// Remove guild from source
 						StatSource source = StatPinger.sources.get(index);
 						if (!source.remove(msg.getGuild())) {
-							msg.getChannel().sendMessage(WARNING_NOTFOUND.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
+							msg.getChannel().sendMessage(WARNING_NOT_FOUND.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
 							return; // ENDS HERE IF NOT FOUND
 						}
 						
@@ -90,14 +90,14 @@ public class Unwatch extends ListenerAdapter {
 						int index = StatPinger.sources.indexOf(new StatSource(user.getUserHandle(), SourceType.TweetFollow));
 						// If source isn't found
 						if (index == -1) {
-							msg.getChannel().sendMessage(WARNING_NOTFOUND.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
+							msg.getChannel().sendMessage(WARNING_NOT_FOUND.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
 							return; // ENDS HERE IF NOT FOUND
 						}
 						
 						// Remove guild from source
 						StatSource source = StatPinger.sources.get(index);
 						if (!source.remove(msg.getGuild())) {
-							msg.getChannel().sendMessage(WARNING_NOTFOUND.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
+							msg.getChannel().sendMessage(WARNING_NOT_FOUND.build()).complete().delete().queueAfter(60, TimeUnit.SECONDS);
 							return; // ENDS HERE IF NOT FOUND
 						}
 						
