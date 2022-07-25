@@ -1,5 +1,4 @@
 Manifest-Version: 1.0
 Main-Class: maertin.bot.StatPinger
-Class-Path: JDA-4.3.0_277-withDependencies.jar JDA-4.3.0_277-javadoc.jar
-  jsoup-1.13.1.jar jsoup-1.13.1-javadoc.jar
+Class-Path: lib/JDA-4.3.0_277-withDependencies.jar lib/jsoup-1.13.1.jar
 

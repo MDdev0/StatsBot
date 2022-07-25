@@ -36,8 +36,10 @@ public class StatPinger {
 
 	public static void main(String[] args) throws LoginException, IOException, InterruptedException {
 		// Interpret Config
+		// FIXME: Find a way to move default config back to root, then remove that from gitignore
 		File config = new File("StatsBot.config");
 		if (!config.exists()) {
+			System.out.println("[Startup] Could not find configuration file, creating a new one");
 			Files.copy(Objects.requireNonNull(StatPinger.class.getResourceAsStream("StatsBot.config")), config.toPath());
 		}
 		try {
@@ -78,12 +80,12 @@ public class StatPinger {
 		System.out.println("[Startup] Set YouTube API Key: " + YOUTUBE_API_KEY);
 		PREFIX = cfg.get(cfg.indexOf("prefix") + 1);
 		System.out.println("[Startup] Set global prefix: " + PREFIX);
-		REFRESH_RATE = Long.parseLong(cfg.get(cfg.indexOf("refresh-rate") + 1));
+		REFRESH_RATE = Long.decode(cfg.get(cfg.indexOf("refresh-rate") + 1).trim());
 		System.out.println("[Startup] Set refresh rate: " + REFRESH_RATE + " ms");
-		QUERY_TIMEOUT = Integer.parseInt(cfg.get(cfg.indexOf("web-query-timeout") + 1));
-		System.out.println("[Startup] Set web query timeout: " + QUERY_TIMEOUT + " ms");
+		QUERY_TIMEOUT = Integer.parseInt(cfg.get(cfg.indexOf("web-query-timeout") + 1).trim());
+		System.out.println("c Set web query timeout: " + QUERY_TIMEOUT + " ms");
 	}
-	
+
 	/**
 	 * Loads all the saved sources into the new instance of the pinger.
 	 */
