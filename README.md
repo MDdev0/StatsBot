@@ -32,7 +32,10 @@ Get pings in your discord servers whenever statistics about someone on the inter
 ## Supported Source Types
 - YouTube
 	- Channel Subscribers
-- Twitter
-	- User's Followers
-
+- ~~Twitter~~
+    - ~~User's Followers~~
 - More types coming soon
+
+*Twitter sources are currently non-functional due to an in-progress API changeover (RIP mixerno.space).*
+*The commands for them still exist, but they are not at all supported currently (until I decide to deal with Twitter's API).*
+<u>*Please remember that if a report already exists for your issue, you should just comment there instead of creating a new bug report.*
