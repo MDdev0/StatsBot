@@ -12,10 +12,11 @@ import org.jsoup.Jsoup;
  * @author maertin - Discord: MDguy1547#8643
  */
 public class YTChannel {
-	private final String URL = "https://mixerno.space/api/youtube-channel-counter/user/";
-	private final String NAME_LOCATION = "\"value\":\"name\",\"count\":\"";
-	private final String ICON_LOCATION = "\"value\":\"pfp\",\"count\":\"";
-	private final String SUBSCRIBER_LOCATION = "\"value\":\"apisubscribers\",\"count\":";
+	private final String URL = "https://youtube.googleapis.com/youtube/v3/channels?part=statistics&part=snippet&maxResults=1&key="
+			+ StatPinger.YOUTUBE_API_KEY + "&id=";
+	private final String NAME_LOCATION = "\"title\":\"";
+	private final String ICON_LOCATION = "\"high\":{\"url\":\"";
+	private final String SUBSCRIBER_LOCATION = "\"subscriberCount\":\"";
 	
 	private String channelID;
 	private String channelName;
@@ -24,7 +25,7 @@ public class YTChannel {
 	
 	/**
 	 * Builds an instance of a YTChannel.<br>
-	 * Uses the Mixerno API to get the information needed.
+	 * Uses the YouTube Data API v3 to get the information needed.
 	 * @param channelID - String of YouTube Channel ID.
 	 * THIS IS NOT ALWAYS THE CHANNEL URL!
 	 * @see YTData YTData.getChannelID() to be sure of the ID.
@@ -33,13 +34,13 @@ public class YTChannel {
 	public YTChannel(String channelID) throws IOException {
 		this.channelID = channelID;
 		// CONNECTION TIMES OUT AFTER SET TIME! See AlertManager for handling of timeouts. 
-		final String apiText = Jsoup.connect(URL + channelID).timeout(StatPinger.QUERY_TIMEOUT).get().text().replaceAll("\\s", "");
-		this.channelName = apiText.substring(apiText.indexOf(NAME_LOCATION) + NAME_LOCATION.length());
-		this.channelName = this.channelName.substring(0, this.channelName.indexOf('"'));
-		this.channelIcon = apiText.substring(apiText.indexOf(ICON_LOCATION) + ICON_LOCATION.length());
-		this.channelIcon = this.channelIcon.substring(0, this.channelIcon.indexOf('"'));
+		String apiText = Jsoup.connect(URL + channelID).timeout(StatPinger.QUERY_TIMEOUT).get().text().replaceAll("\\s", "");
+		channelName = apiText.substring(apiText.indexOf(NAME_LOCATION) + NAME_LOCATION.length());
+		channelName = channelName.substring(0, channelName.indexOf('"'));
+		channelIcon = apiText.substring(apiText.indexOf(ICON_LOCATION) + ICON_LOCATION.length());
+		channelIcon = channelIcon.substring(0, channelIcon.indexOf('"'));
 		String subCountStr = apiText.substring(apiText.indexOf(SUBSCRIBER_LOCATION) + SUBSCRIBER_LOCATION.length());
-		this.subCount = Integer.parseInt(subCountStr.substring(0, subCountStr.indexOf('}')));
+		subCount = Integer.parseInt(subCountStr.substring(0, subCountStr.indexOf('"')));
 	}
 	
 	/**
