@@ -74,11 +74,11 @@ public class StatPinger {
 	 */
 	private static void setupConfig(File configFile) throws IOException {
 		ArrayList<String> cfg = new ArrayList<>(Arrays.asList(Files.readString(configFile.toPath()).split("[\n=]")));
-		DISCORD_API_KEY = cfg.get(cfg.indexOf("discord-api-key") + 1);
+		DISCORD_API_KEY = cfg.get(cfg.indexOf("discord-api-key") + 1).trim();
 		System.out.println("[Startup] Set Discord API Key: " + DISCORD_API_KEY);
-		YOUTUBE_API_KEY = cfg.get(cfg.indexOf("youtube-api-key") + 1);
+		YOUTUBE_API_KEY = cfg.get(cfg.indexOf("youtube-api-key") + 1).trim();
 		System.out.println("[Startup] Set YouTube API Key: " + YOUTUBE_API_KEY);
-		PREFIX = cfg.get(cfg.indexOf("prefix") + 1);
+		PREFIX = cfg.get(cfg.indexOf("prefix") + 1).trim();
 		System.out.println("[Startup] Set global prefix: " + PREFIX);
 		REFRESH_RATE = Long.decode(cfg.get(cfg.indexOf("refresh-rate") + 1).trim());
 		System.out.println("[Startup] Set refresh rate: " + REFRESH_RATE + " ms");
