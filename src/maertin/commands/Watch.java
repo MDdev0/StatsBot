@@ -23,7 +23,7 @@ public class Watch extends ListenerAdapter {
 		final EmbedBuilder SUCCESS = new EmbedBuilder().setTitle("✅ Success!").setColor(0x2dd52d)
 				.setDescription("Your guild will now be notified about the following source. Use `" + StatPinger.PREFIX + "unwatch` to remove it later.");
 		final EmbedBuilder ERROR_UNKNOWN = new EmbedBuilder().setTitle("⛔ Error").setColor(0xe0143e).setDescription(
-				"An unknown error occured while trying to watch this source. Maybe try another one or try again later?")
+				"An unknown error occurred while trying to watch this source. Maybe try another one or try again later?")
 				.setFooter("This message will be deleted in 60 seconds.");
 		final EmbedBuilder WARNING_SYNTAX = new EmbedBuilder().setTitle("⚠ Improper Syntax").setColor(0xefef32).setFooter("This message will be deleted in 60 seconds.")
 				.addField("YouTube Subscriber Count:", "`" + StatPinger.PREFIX + "watch` `youtube.com/channel/#######` `subscribers`", false)

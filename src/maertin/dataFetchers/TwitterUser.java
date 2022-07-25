@@ -28,14 +28,14 @@ public class TwitterUser {
 	 * @throws IOException in case of any error
 	 */
 	public TwitterUser(String handle) throws IOException {
-		this.userHandle = handle;
+		userHandle = handle;
 		final String apiText = Jsoup.connect(URL + handle).ignoreContentType(true).timeout(StatPinger.QUERY_TIMEOUT).get().text().replaceAll("\\s", "");
-		this.userName = apiText.substring(apiText.indexOf(NAME_LOCATION) + NAME_LOCATION.length());
-		this.userName = this.userName.substring(0, this.userName.indexOf('"'));
-		this.userIcon = apiText.substring(apiText.indexOf(ICON_LOCATION) + ICON_LOCATION.length());
-		this.userIcon = this.userIcon.substring(0, this.userIcon.indexOf('"'));
+		userName = apiText.substring(apiText.indexOf(NAME_LOCATION) + NAME_LOCATION.length());
+		userName = userName.substring(0, userName.indexOf('"'));
+		userIcon = apiText.substring(apiText.indexOf(ICON_LOCATION) + ICON_LOCATION.length());
+		userIcon = userIcon.substring(0, userIcon.indexOf('"'));
 		String followCountStr = apiText.substring(apiText.indexOf(FOLLOWER_LOCATION) + FOLLOWER_LOCATION.length());
-		this.followCount = Integer.parseInt(followCountStr.substring(0, followCountStr.indexOf("}")));
+		followCount = Integer.parseInt(followCountStr.substring(0, followCountStr.indexOf("}")));
 	}
 	
 	/**

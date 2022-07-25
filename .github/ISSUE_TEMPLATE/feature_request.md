@@ -7,6 +7,8 @@ assignees: ''
 
 ---
 
+<h3>If a feature request already exists for what you want, please post your thoughts under that request. Duplicates will be closed as such.</h3><br><br>
+
 **What is missing?**
 Are you missing a type of source, a command, or something else altogether?
 

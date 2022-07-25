@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+@SuppressWarnings("ALL")
 public class ScrapeTest {
 	
 	final static String URL = "https://beta.mixerno.space/youtube-subscriber-counter/UCDpXkkO-zrCJBByrdERqKMw";

@@ -7,6 +7,8 @@ assignees: MDdev0
 
 ---
 
+<h3>If a bug report already exists for what you have found, please post your findings under that report. Duplicates will be closed as such.</h3><br><br>
+
 **Screenshots**
 Please include the error AND the commands leading up to it.
 
