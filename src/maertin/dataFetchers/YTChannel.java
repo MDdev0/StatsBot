@@ -34,7 +34,7 @@ public class YTChannel {
 	public YTChannel(String channelID) throws IOException {
 		this.channelID = channelID;
 		// CONNECTION TIMES OUT AFTER SET TIME! See AlertManager for handling of timeouts. 
-		String apiText = Jsoup.connect(URL + channelID).timeout(StatPinger.QUERY_TIMEOUT).get().text().replaceAll("\\s", "");
+		String apiText = Jsoup.connect(URL + channelID).timeout(StatPinger.QUERY_TIMEOUT).ignoreContentType(true).get().text().replaceAll("\\s", "");
 		channelName = apiText.substring(apiText.indexOf(NAME_LOCATION) + NAME_LOCATION.length());
 		channelName = channelName.substring(0, channelName.indexOf('"'));
 		channelIcon = apiText.substring(apiText.indexOf(ICON_LOCATION) + ICON_LOCATION.length());
